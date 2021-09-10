@@ -46,9 +46,10 @@ export const fetcherSchema = async (key) => {
   const storeMain = useStoreMain()
   const supabase = storeMain.supabase
   const response = await fetch(
-    `${supabase.supabaseUrl}/rest/v1/?apikey=${supabase.supabaseKey}`,
+    `${supabase.supabaseUrl}/rest/v1/?apikey=${encodeURIComponent(supabase.supabaseKey)}`,
     {
       method: 'GET'
-    })
+    }
+  )
   return response.json()
 }
