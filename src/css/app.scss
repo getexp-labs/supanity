@@ -1,0 +1,23 @@
+// app global css in SCSS form
+.br {
+  border: 1px solid red;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+::-webkit-scrollbar {
+  width: 0px !important;
+  height: 0px !important;
+}
+
+// .q-layout, .q-drawer, html, body {
+//   background: var($primary);
+//   color: white;
+// }
+
+.q-dialog__inner {
+  padding: 0;
+}

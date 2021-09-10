@@ -1,0 +1,1292 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "20210627",
+    "title": "PostgREST API",
+    "description": "standard public schema"
+  },
+  "host": "0.0.0.0:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "consumes": [
+    "application/json",
+    "application/vnd.pgrst.object+json",
+    "text/csv"
+  ],
+  "produces": [
+    "application/json",
+    "application/vnd.pgrst.object+json",
+    "text/csv"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Introspection"],
+        "summary": "OpenAPI description (this document)",
+        "produces": ["application/openapi+json", "application/json"],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/discounts": {
+      "get": {
+        "tags": ["discounts"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.discounts.id" },
+          { "$ref": "#/parameters/rowFilter.discounts.amount" },
+          { "$ref": "#/parameters/rowFilter.discounts.type" },
+          { "$ref": "#/parameters/rowFilter.discounts.valid_till" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/order" },
+          { "$ref": "#/parameters/range" },
+          { "$ref": "#/parameters/rangeUnit" },
+          { "$ref": "#/parameters/offset" },
+          { "$ref": "#/parameters/limit" },
+          { "$ref": "#/parameters/preferCount" }
+        ],
+        "responses": {
+          "206": { "description": "Partial Content" },
+          "200": {
+            "schema": {
+              "items": { "$ref": "#/definitions/discounts" },
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["discounts"],
+        "parameters": [
+          { "$ref": "#/parameters/body.discounts" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "201": { "description": "Created" } }
+      },
+      "delete": {
+        "tags": ["discounts"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.discounts.id" },
+          { "$ref": "#/parameters/rowFilter.discounts.amount" },
+          { "$ref": "#/parameters/rowFilter.discounts.type" },
+          { "$ref": "#/parameters/rowFilter.discounts.valid_till" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      },
+      "patch": {
+        "tags": ["discounts"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.discounts.id" },
+          { "$ref": "#/parameters/rowFilter.discounts.amount" },
+          { "$ref": "#/parameters/rowFilter.discounts.type" },
+          { "$ref": "#/parameters/rowFilter.discounts.valid_till" },
+          { "$ref": "#/parameters/body.discounts" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      }
+    },
+    "/games": {
+      "get": {
+        "tags": ["games"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.games.id" },
+          { "$ref": "#/parameters/rowFilter.games.name" },
+          { "$ref": "#/parameters/rowFilter.games.platforms" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/order" },
+          { "$ref": "#/parameters/range" },
+          { "$ref": "#/parameters/rangeUnit" },
+          { "$ref": "#/parameters/offset" },
+          { "$ref": "#/parameters/limit" },
+          { "$ref": "#/parameters/preferCount" }
+        ],
+        "responses": {
+          "206": { "description": "Partial Content" },
+          "200": {
+            "schema": {
+              "items": { "$ref": "#/definitions/games" },
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["games"],
+        "parameters": [
+          { "$ref": "#/parameters/body.games" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "201": { "description": "Created" } }
+      },
+      "delete": {
+        "tags": ["games"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.games.id" },
+          { "$ref": "#/parameters/rowFilter.games.name" },
+          { "$ref": "#/parameters/rowFilter.games.platforms" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      },
+      "patch": {
+        "tags": ["games"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.games.id" },
+          { "$ref": "#/parameters/rowFilter.games.name" },
+          { "$ref": "#/parameters/rowFilter.games.platforms" },
+          { "$ref": "#/parameters/body.games" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      }
+    },
+    "/likes": {
+      "get": {
+        "tags": ["likes"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.likes.user_id" },
+          { "$ref": "#/parameters/rowFilter.likes.offer_id" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/order" },
+          { "$ref": "#/parameters/range" },
+          { "$ref": "#/parameters/rangeUnit" },
+          { "$ref": "#/parameters/offset" },
+          { "$ref": "#/parameters/limit" },
+          { "$ref": "#/parameters/preferCount" }
+        ],
+        "responses": {
+          "206": { "description": "Partial Content" },
+          "200": {
+            "schema": {
+              "items": { "$ref": "#/definitions/likes" },
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["likes"],
+        "parameters": [
+          { "$ref": "#/parameters/body.likes" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "201": { "description": "Created" } }
+      },
+      "delete": {
+        "tags": ["likes"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.likes.user_id" },
+          { "$ref": "#/parameters/rowFilter.likes.offer_id" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      },
+      "patch": {
+        "tags": ["likes"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.likes.user_id" },
+          { "$ref": "#/parameters/rowFilter.likes.offer_id" },
+          { "$ref": "#/parameters/body.likes" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      }
+    },
+    "/offer_groups": {
+      "get": {
+        "tags": ["offer_groups"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.offer_groups.id" },
+          { "$ref": "#/parameters/rowFilter.offer_groups.name" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/order" },
+          { "$ref": "#/parameters/range" },
+          { "$ref": "#/parameters/rangeUnit" },
+          { "$ref": "#/parameters/offset" },
+          { "$ref": "#/parameters/limit" },
+          { "$ref": "#/parameters/preferCount" }
+        ],
+        "responses": {
+          "206": { "description": "Partial Content" },
+          "200": {
+            "schema": {
+              "items": { "$ref": "#/definitions/offer_groups" },
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["offer_groups"],
+        "parameters": [
+          { "$ref": "#/parameters/body.offer_groups" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "201": { "description": "Created" } }
+      },
+      "delete": {
+        "tags": ["offer_groups"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.offer_groups.id" },
+          { "$ref": "#/parameters/rowFilter.offer_groups.name" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      },
+      "patch": {
+        "tags": ["offer_groups"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.offer_groups.id" },
+          { "$ref": "#/parameters/rowFilter.offer_groups.name" },
+          { "$ref": "#/parameters/body.offer_groups" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      }
+    },
+    "/offers": {
+      "get": {
+        "tags": ["offers"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.offers.id" },
+          { "$ref": "#/parameters/rowFilter.offers.title" },
+          { "$ref": "#/parameters/rowFilter.offers.body" },
+          { "$ref": "#/parameters/rowFilter.offers.version" },
+          { "$ref": "#/parameters/rowFilter.offers.price" },
+          { "$ref": "#/parameters/rowFilter.offers.time" },
+          { "$ref": "#/parameters/rowFilter.offers.wins" },
+          { "$ref": "#/parameters/rowFilter.offers.game_id" },
+          { "$ref": "#/parameters/rowFilter.offers.discount_id" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/order" },
+          { "$ref": "#/parameters/range" },
+          { "$ref": "#/parameters/rangeUnit" },
+          { "$ref": "#/parameters/offset" },
+          { "$ref": "#/parameters/limit" },
+          { "$ref": "#/parameters/preferCount" }
+        ],
+        "responses": {
+          "206": { "description": "Partial Content" },
+          "200": {
+            "schema": {
+              "items": { "$ref": "#/definitions/offers" },
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["offers"],
+        "parameters": [
+          { "$ref": "#/parameters/body.offers" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "201": { "description": "Created" } }
+      },
+      "delete": {
+        "tags": ["offers"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.offers.id" },
+          { "$ref": "#/parameters/rowFilter.offers.title" },
+          { "$ref": "#/parameters/rowFilter.offers.body" },
+          { "$ref": "#/parameters/rowFilter.offers.version" },
+          { "$ref": "#/parameters/rowFilter.offers.price" },
+          { "$ref": "#/parameters/rowFilter.offers.time" },
+          { "$ref": "#/parameters/rowFilter.offers.wins" },
+          { "$ref": "#/parameters/rowFilter.offers.game_id" },
+          { "$ref": "#/parameters/rowFilter.offers.discount_id" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      },
+      "patch": {
+        "tags": ["offers"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.offers.id" },
+          { "$ref": "#/parameters/rowFilter.offers.title" },
+          { "$ref": "#/parameters/rowFilter.offers.body" },
+          { "$ref": "#/parameters/rowFilter.offers.version" },
+          { "$ref": "#/parameters/rowFilter.offers.price" },
+          { "$ref": "#/parameters/rowFilter.offers.time" },
+          { "$ref": "#/parameters/rowFilter.offers.wins" },
+          { "$ref": "#/parameters/rowFilter.offers.game_id" },
+          { "$ref": "#/parameters/rowFilter.offers.discount_id" },
+          { "$ref": "#/parameters/body.offers" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      }
+    },
+    "/offers_offer_groups": {
+      "get": {
+        "tags": ["offers_offer_groups"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.offers_offer_groups.offer_id" },
+          {
+            "$ref": "#/parameters/rowFilter.offers_offer_groups.offer_group_id"
+          },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/order" },
+          { "$ref": "#/parameters/range" },
+          { "$ref": "#/parameters/rangeUnit" },
+          { "$ref": "#/parameters/offset" },
+          { "$ref": "#/parameters/limit" },
+          { "$ref": "#/parameters/preferCount" }
+        ],
+        "responses": {
+          "206": { "description": "Partial Content" },
+          "200": {
+            "schema": {
+              "items": { "$ref": "#/definitions/offers_offer_groups" },
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["offers_offer_groups"],
+        "parameters": [
+          { "$ref": "#/parameters/body.offers_offer_groups" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "201": { "description": "Created" } }
+      },
+      "delete": {
+        "tags": ["offers_offer_groups"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.offers_offer_groups.offer_id" },
+          {
+            "$ref": "#/parameters/rowFilter.offers_offer_groups.offer_group_id"
+          },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      },
+      "patch": {
+        "tags": ["offers_offer_groups"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.offers_offer_groups.offer_id" },
+          {
+            "$ref": "#/parameters/rowFilter.offers_offer_groups.offer_group_id"
+          },
+          { "$ref": "#/parameters/body.offers_offer_groups" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      }
+    },
+    "/orders": {
+      "get": {
+        "tags": ["orders"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.orders.id" },
+          { "$ref": "#/parameters/rowFilter.orders.status" },
+          { "$ref": "#/parameters/rowFilter.orders.customer_id" },
+          { "$ref": "#/parameters/rowFilter.orders.sold_by" },
+          { "$ref": "#/parameters/rowFilter.orders.sold_by_id" },
+          { "$ref": "#/parameters/rowFilter.orders.chat_link" },
+          { "$ref": "#/parameters/rowFilter.orders.code" },
+          { "$ref": "#/parameters/rowFilter.orders.platform_type" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/order" },
+          { "$ref": "#/parameters/range" },
+          { "$ref": "#/parameters/rangeUnit" },
+          { "$ref": "#/parameters/offset" },
+          { "$ref": "#/parameters/limit" },
+          { "$ref": "#/parameters/preferCount" }
+        ],
+        "responses": {
+          "206": { "description": "Partial Content" },
+          "200": {
+            "schema": {
+              "items": { "$ref": "#/definitions/orders" },
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["orders"],
+        "parameters": [
+          { "$ref": "#/parameters/body.orders" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "201": { "description": "Created" } }
+      },
+      "delete": {
+        "tags": ["orders"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.orders.id" },
+          { "$ref": "#/parameters/rowFilter.orders.status" },
+          { "$ref": "#/parameters/rowFilter.orders.customer_id" },
+          { "$ref": "#/parameters/rowFilter.orders.sold_by" },
+          { "$ref": "#/parameters/rowFilter.orders.sold_by_id" },
+          { "$ref": "#/parameters/rowFilter.orders.chat_link" },
+          { "$ref": "#/parameters/rowFilter.orders.code" },
+          { "$ref": "#/parameters/rowFilter.orders.platform_type" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      },
+      "patch": {
+        "tags": ["orders"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.orders.id" },
+          { "$ref": "#/parameters/rowFilter.orders.status" },
+          { "$ref": "#/parameters/rowFilter.orders.customer_id" },
+          { "$ref": "#/parameters/rowFilter.orders.sold_by" },
+          { "$ref": "#/parameters/rowFilter.orders.sold_by_id" },
+          { "$ref": "#/parameters/rowFilter.orders.chat_link" },
+          { "$ref": "#/parameters/rowFilter.orders.code" },
+          { "$ref": "#/parameters/rowFilter.orders.platform_type" },
+          { "$ref": "#/parameters/body.orders" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      }
+    },
+    "/orders_offers_executors": {
+      "get": {
+        "tags": ["orders_offers_executors"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.orders_offers_executors.offer_id" },
+          { "$ref": "#/parameters/rowFilter.orders_offers_executors.order_id" },
+          {
+            "$ref": "#/parameters/rowFilter.orders_offers_executors.executor_id"
+          },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/order" },
+          { "$ref": "#/parameters/range" },
+          { "$ref": "#/parameters/rangeUnit" },
+          { "$ref": "#/parameters/offset" },
+          { "$ref": "#/parameters/limit" },
+          { "$ref": "#/parameters/preferCount" }
+        ],
+        "responses": {
+          "206": { "description": "Partial Content" },
+          "200": {
+            "schema": {
+              "items": { "$ref": "#/definitions/orders_offers_executors" },
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["orders_offers_executors"],
+        "parameters": [
+          { "$ref": "#/parameters/body.orders_offers_executors" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "201": { "description": "Created" } }
+      },
+      "delete": {
+        "tags": ["orders_offers_executors"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.orders_offers_executors.offer_id" },
+          { "$ref": "#/parameters/rowFilter.orders_offers_executors.order_id" },
+          {
+            "$ref": "#/parameters/rowFilter.orders_offers_executors.executor_id"
+          },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      },
+      "patch": {
+        "tags": ["orders_offers_executors"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.orders_offers_executors.offer_id" },
+          { "$ref": "#/parameters/rowFilter.orders_offers_executors.order_id" },
+          {
+            "$ref": "#/parameters/rowFilter.orders_offers_executors.executor_id"
+          },
+          { "$ref": "#/parameters/body.orders_offers_executors" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["users"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.users.id" },
+          { "$ref": "#/parameters/rowFilter.users.email" },
+          { "$ref": "#/parameters/rowFilter.users.discord_id" },
+          { "$ref": "#/parameters/rowFilter.users.is_online" },
+          { "$ref": "#/parameters/rowFilter.users.coin_amount" },
+          { "$ref": "#/parameters/rowFilter.users.role" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/order" },
+          { "$ref": "#/parameters/range" },
+          { "$ref": "#/parameters/rangeUnit" },
+          { "$ref": "#/parameters/offset" },
+          { "$ref": "#/parameters/limit" },
+          { "$ref": "#/parameters/preferCount" }
+        ],
+        "responses": {
+          "206": { "description": "Partial Content" },
+          "200": {
+            "schema": {
+              "items": { "$ref": "#/definitions/users" },
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["users"],
+        "parameters": [
+          { "$ref": "#/parameters/body.users" },
+          { "$ref": "#/parameters/select" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "201": { "description": "Created" } }
+      },
+      "delete": {
+        "tags": ["users"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.users.id" },
+          { "$ref": "#/parameters/rowFilter.users.email" },
+          { "$ref": "#/parameters/rowFilter.users.discord_id" },
+          { "$ref": "#/parameters/rowFilter.users.is_online" },
+          { "$ref": "#/parameters/rowFilter.users.coin_amount" },
+          { "$ref": "#/parameters/rowFilter.users.role" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      },
+      "patch": {
+        "tags": ["users"],
+        "parameters": [
+          { "$ref": "#/parameters/rowFilter.users.id" },
+          { "$ref": "#/parameters/rowFilter.users.email" },
+          { "$ref": "#/parameters/rowFilter.users.discord_id" },
+          { "$ref": "#/parameters/rowFilter.users.is_online" },
+          { "$ref": "#/parameters/rowFilter.users.coin_amount" },
+          { "$ref": "#/parameters/rowFilter.users.role" },
+          { "$ref": "#/parameters/body.users" },
+          { "$ref": "#/parameters/preferReturn" }
+        ],
+        "responses": { "204": { "description": "No Content" } }
+      }
+    },
+    "/rpc/signup_copy_to_users_table": {
+      "post": {
+        "tags": ["(rpc) signup_copy_to_users_table"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": { "type": "object" },
+            "in": "body",
+            "name": "args"
+          },
+          { "$ref": "#/parameters/preferParams" }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    }
+  },
+  "definitions": {
+    "discounts": {
+      "required": ["id", "type"],
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "amount": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Amount of the discount, meaning depends on type"
+        },
+        "type": {
+          "format": "character varying",
+          "type": "string",
+          "description": "Type of the discount (e.g. 2_FOR_1, PERCENT, 3_FOR_1)"
+        },
+        "valid_till": {
+          "format": "timestamp without time zone",
+          "type": "string",
+          "description": "End of discount for limited ones"
+        }
+      },
+      "type": "object"
+    },
+    "games": {
+      "required": ["id", "name", "platforms"],
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "name": {
+          "format": "character varying",
+          "type": "string",
+          "description": "Name of the game"
+        },
+        "platforms": {
+          "format": "ARRAY",
+          "type": "string",
+          "description": "Platforms where game is available (e.g. PS4/PS5/PC/XBOX)"
+        }
+      },
+      "type": "object"
+    },
+    "likes": {
+      "required": ["user_id", "offer_id"],
+      "properties": {
+        "user_id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>"
+        },
+        "offer_id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Foreign Key to `offers.id`.<fk table='offers' column='id'/>"
+        }
+      },
+      "type": "object"
+    },
+    "offer_groups": {
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "name": {
+          "format": "character varying",
+          "type": "string",
+          "description": "Name of the category"
+        }
+      },
+      "type": "object"
+    },
+    "offers": {
+      "required": ["id", "title", "version"],
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "title": {
+          "format": "character varying",
+          "type": "string",
+          "description": "Title of the offer"
+        },
+        "body": {
+          "format": "jsonb",
+          "type": "string",
+          "description": "Description of the offer"
+        },
+        "version": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Version of the offer (offer can be changed in time)"
+        },
+        "price": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Price of the offer in internal currency"
+        },
+        "time": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Time duration (in seconds) for task in offer"
+        },
+        "wins": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Number of wins for the offer"
+        },
+        "game_id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Foreign key to games table\n\nNote:\nThis is a Foreign Key to `games.id`.<fk table='games' column='id'/>"
+        },
+        "discount_id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Foreign key for discount\n\nNote:\nThis is a Foreign Key to `discounts.id`.<fk table='discounts' column='id'/>"
+        }
+      },
+      "type": "object"
+    },
+    "offers_offer_groups": {
+      "required": ["offer_id", "offer_group_id"],
+      "properties": {
+        "offer_id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Foreign Key to `offers.id`.<fk table='offers' column='id'/>"
+        },
+        "offer_group_id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Foreign Key to `offer_groups.id`.<fk table='offer_groups' column='id'/>"
+        }
+      },
+      "type": "object"
+    },
+    "orders": {
+      "required": ["id", "status", "customer_id", "sold_by", "platform_type"],
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "status": {
+          "format": "character varying",
+          "type": "string",
+          "description": "Status of the order, can be: WAITING/CONFIRMED/PAYED/IN_PROGRESS/COMPLETED"
+        },
+        "customer_id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Foreign key of buyer\n\nNote:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>"
+        },
+        "sold_by": {
+          "format": "character varying",
+          "type": "string",
+          "description": "Type of the seller, can be: SELLER/AUTO_SELLER/BOOSTER"
+        },
+        "sold_by_id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "ID of seller in case type is BOOSTER/SELLER\n\nNote:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>"
+        },
+        "chat_link": {
+          "format": "character varying",
+          "type": "string",
+          "description": "Link to the discord room"
+        },
+        "code": {
+          "format": "character varying",
+          "type": "string",
+          "description": "Public code of the order, visible to others"
+        },
+        "platform_type": {
+          "format": "character varying",
+          "type": "string",
+          "description": "Type of the platform for the order, e.g. PS5/PS4/PC"
+        }
+      },
+      "type": "object"
+    },
+    "orders_offers_executors": {
+      "required": ["offer_id", "order_id"],
+      "properties": {
+        "offer_id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Foreign Key to `offers.id`.<fk table='offers' column='id'/>"
+        },
+        "order_id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Foreign Key to `orders.id`.<fk table='orders' column='id'/>"
+        },
+        "executor_id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Foreign Key to `users.id`.<fk table='users' column='id'/>"
+        }
+      },
+      "type": "object"
+    },
+    "users": {
+      "required": ["id", "discord_id", "is_online", "coin_amount", "role"],
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "email": { "format": "text", "type": "string" },
+        "discord_id": { "format": "text", "type": "string" },
+        "is_online": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean",
+          "description": "Activated when user goes online, turned off when user is inactive for 5 minutes"
+        },
+        "coin_amount": {
+          "format": "bigint",
+          "type": "integer",
+          "description": "Amount of GetExp coins in user's wallet"
+        },
+        "role": {
+          "format": "character varying",
+          "type": "string",
+          "description": "User's internal role (BOOSTER/ADMIN/CUSTOMER)"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "parameters": {
+    "preferParams": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "in": "header",
+      "type": "string",
+      "enum": ["params=single-object"]
+    },
+    "preferReturn": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "in": "header",
+      "type": "string",
+      "enum": ["return=representation", "return=minimal", "return=none"]
+    },
+    "preferCount": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "in": "header",
+      "type": "string",
+      "enum": ["count=none"]
+    },
+    "select": {
+      "name": "select",
+      "description": "Filtering Columns",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "on_conflict": {
+      "name": "on_conflict",
+      "description": "On Conflict",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "order": {
+      "name": "order",
+      "description": "Ordering",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "range": {
+      "name": "Range",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "in": "header",
+      "type": "string"
+    },
+    "rangeUnit": {
+      "name": "Range-Unit",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "default": "items",
+      "in": "header",
+      "type": "string"
+    },
+    "offset": {
+      "name": "offset",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "limit": {
+      "name": "limit",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "body.discounts": {
+      "name": "discounts",
+      "description": "discounts",
+      "required": false,
+      "schema": { "$ref": "#/definitions/discounts" },
+      "in": "body"
+    },
+    "rowFilter.discounts.id": {
+      "name": "id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.discounts.amount": {
+      "name": "amount",
+      "description": "Amount of the discount, meaning depends on type",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.discounts.type": {
+      "name": "type",
+      "description": "Type of the discount (e.g. 2_FOR_1, PERCENT, 3_FOR_1)",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.discounts.valid_till": {
+      "name": "valid_till",
+      "description": "End of discount for limited ones",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "body.games": {
+      "name": "games",
+      "description": "games",
+      "required": false,
+      "schema": { "$ref": "#/definitions/games" },
+      "in": "body"
+    },
+    "rowFilter.games.id": {
+      "name": "id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.games.name": {
+      "name": "name",
+      "description": "Name of the game",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.games.platforms": {
+      "name": "platforms",
+      "description": "Platforms where game is available (e.g. PS4/PS5/PC/XBOX)",
+      "required": false,
+      "format": "ARRAY",
+      "in": "query",
+      "type": "string"
+    },
+    "body.likes": {
+      "name": "likes",
+      "description": "likes",
+      "required": false,
+      "schema": { "$ref": "#/definitions/likes" },
+      "in": "body"
+    },
+    "rowFilter.likes.user_id": {
+      "name": "user_id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.likes.offer_id": {
+      "name": "offer_id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "body.offer_groups": {
+      "name": "offer_groups",
+      "description": "offer_groups",
+      "required": false,
+      "schema": { "$ref": "#/definitions/offer_groups" },
+      "in": "body"
+    },
+    "rowFilter.offer_groups.id": {
+      "name": "id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.offer_groups.name": {
+      "name": "name",
+      "description": "Name of the category",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "body.offers": {
+      "name": "offers",
+      "description": "offers",
+      "required": false,
+      "schema": { "$ref": "#/definitions/offers" },
+      "in": "body"
+    },
+    "rowFilter.offers.id": {
+      "name": "id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.offers.title": {
+      "name": "title",
+      "description": "Title of the offer",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.offers.body": {
+      "name": "body",
+      "description": "Description of the offer",
+      "required": false,
+      "format": "jsonb",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.offers.version": {
+      "name": "version",
+      "description": "Version of the offer (offer can be changed in time)",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.offers.price": {
+      "name": "price",
+      "description": "Price of the offer in internal currency",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.offers.time": {
+      "name": "time",
+      "description": "Time duration (in seconds) for task in offer",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.offers.wins": {
+      "name": "wins",
+      "description": "Number of wins for the offer",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.offers.game_id": {
+      "name": "game_id",
+      "description": "Foreign key to games table",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.offers.discount_id": {
+      "name": "discount_id",
+      "description": "Foreign key for discount",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "body.offers_offer_groups": {
+      "name": "offers_offer_groups",
+      "description": "offers_offer_groups",
+      "required": false,
+      "schema": { "$ref": "#/definitions/offers_offer_groups" },
+      "in": "body"
+    },
+    "rowFilter.offers_offer_groups.offer_id": {
+      "name": "offer_id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.offers_offer_groups.offer_group_id": {
+      "name": "offer_group_id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "body.orders": {
+      "name": "orders",
+      "description": "orders",
+      "required": false,
+      "schema": { "$ref": "#/definitions/orders" },
+      "in": "body"
+    },
+    "rowFilter.orders.id": {
+      "name": "id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.status": {
+      "name": "status",
+      "description": "Status of the order, can be: WAITING/CONFIRMED/PAYED/IN_PROGRESS/COMPLETED",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.customer_id": {
+      "name": "customer_id",
+      "description": "Foreign key of buyer",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.sold_by": {
+      "name": "sold_by",
+      "description": "Type of the seller, can be: SELLER/AUTO_SELLER/BOOSTER",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.sold_by_id": {
+      "name": "sold_by_id",
+      "description": "ID of seller in case type is BOOSTER/SELLER",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.chat_link": {
+      "name": "chat_link",
+      "description": "Link to the discord room",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.code": {
+      "name": "code",
+      "description": "Public code of the order, visible to others",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders.platform_type": {
+      "name": "platform_type",
+      "description": "Type of the platform for the order, e.g. PS5/PS4/PC",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "body.orders_offers_executors": {
+      "name": "orders_offers_executors",
+      "description": "orders_offers_executors",
+      "required": false,
+      "schema": { "$ref": "#/definitions/orders_offers_executors" },
+      "in": "body"
+    },
+    "rowFilter.orders_offers_executors.offer_id": {
+      "name": "offer_id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders_offers_executors.order_id": {
+      "name": "order_id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.orders_offers_executors.executor_id": {
+      "name": "executor_id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "body.users": {
+      "name": "users",
+      "description": "users",
+      "required": false,
+      "schema": { "$ref": "#/definitions/users" },
+      "in": "body"
+    },
+    "rowFilter.users.id": {
+      "name": "id",
+      "required": false,
+      "format": "uuid",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.users.email": {
+      "name": "email",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.users.discord_id": {
+      "name": "discord_id",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.users.is_online": {
+      "name": "is_online",
+      "description": "Activated when user goes online, turned off when user is inactive for 5 minutes",
+      "required": false,
+      "format": "boolean",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.users.coin_amount": {
+      "name": "coin_amount",
+      "description": "Amount of GetExp coins in user's wallet",
+      "required": false,
+      "format": "bigint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.users.role": {
+      "name": "role",
+      "description": "User's internal role (BOOSTER/ADMIN/CUSTOMER)",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    }
+  },
+  "externalDocs": {
+    "url": "https://postgrest.org/en/v/api.html",
+    "description": "PostgREST Documentation"
+  }
+}
