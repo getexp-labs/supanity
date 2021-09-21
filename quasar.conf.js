@@ -50,6 +50,7 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
 
+      env: require('dotenv').config().parsed,
       // transpile: false,
 
       // Add dependencies for transpiling with Babel (Array of string/regex)

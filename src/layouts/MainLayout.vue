@@ -13,7 +13,9 @@ q-layout(view="lHh Lpr lFf")
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, watch } from 'vue'
+import { fetcherSchema } from 'boot/api'
+import useSWRV from 'swrv'
 import { useStoreMain } from 'src/stores/main.js'
 
 import Drawer from 'components/Drawer.vue'
@@ -27,6 +29,11 @@ export default defineComponent({
     const storeMain = useStoreMain()
     const state = reactive({
       leftDrawerOpened: false
+    })
+    const { data: schema, error: schemaError } = useSWRV('/schema', fetcherSchema)
+    // Using a watcher, you can update the store with any changes coming from swrv
+    watch(schema, newSchema => {
+      storeMain.setPages(newSchema)
     })
 
     return {

@@ -29,7 +29,6 @@ q-page.q-pa-md
 
 <script >
 import useSWRV from 'swrv'
-import { fetcher } from 'boot/api'
 import { defineComponent, ref, computed, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useStoreMain } from 'src/stores/main.js'
 import ItemEditor from 'components/item/ItemEditor.vue'
@@ -42,11 +41,11 @@ export default defineComponent({
   setup () {
     const refItemEditor = ref(null)
     const storeMain = useStoreMain()
+
+    const { data: schema } = useSWRV('/schema', null)
     const state = reactive({
       tableId: computed(() => storeMain.page.id),
-      definition: computed(() => {
-        return storeMain.schema.definitions[state.tableId]
-      }),
+      definition: computed(() => schema?.value.definitions[state.tableId]),
       item: null,
       itemChanged: false
     })
@@ -97,7 +96,6 @@ export default defineComponent({
       items,
       itemsColumns,
       state,
-      storeMain,
       itemClick,
       itemCreate,
       itemChangedTryClose

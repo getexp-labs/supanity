@@ -5,7 +5,7 @@ q-page.flex.flex-center
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import { fetcherSchema } from 'boot/api'
 import useSWRV from 'swrv'
 import { useStoreMain } from 'src/stores/main.js'
@@ -14,13 +14,8 @@ export default defineComponent({
   name: 'PageIndex',
   setup () {
     const storeMain = useStoreMain()
-    // const { data: schema, error: schemaError } = useSWRV('/schema', fetcherSchema)
-    // const schema = storeMain.schemaGet()
-    // console.log('schema', schema)
 
-    return {
-      // schema
-    }
+    return {}
   }
 })
 </script>

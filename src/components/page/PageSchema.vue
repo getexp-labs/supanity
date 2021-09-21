@@ -9,7 +9,7 @@
 q-page().q-pa-md.scroll
   .row.items-start.content-start.no-wrap
     div(
-      v-for="(d,dkey) in storeMain.schema.definitions" :key="dkey"
+      v-for="(d,dkey) in schema?.definitions" :key="dkey"
       :style=`{
         minWidth: '220px',
         maxWidth: '220px',
@@ -29,15 +29,14 @@ q-page().q-pa-md.scroll
 
 <script >
 import { defineComponent } from 'vue'
-import { useStoreMain } from 'src/stores/main.js'
+import useSWRV from 'swrv'
 
 export default defineComponent({
   name: 'PageSchema',
   setup () {
-    const storeMain = useStoreMain()
-
+    const { data: schema } = useSWRV('/schema', null)
     return {
-      storeMain
+      schema
     }
   }
 })
