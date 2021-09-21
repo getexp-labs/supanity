@@ -12,10 +12,12 @@ div(
       div(
         v-for="(p,pkey) in definition.properties" :key="pkey"
         ).row.full-width.q-mb-sm
-        //- .row.full-width.q-px-sm
-          span {{pkey}}
+        FieldID(
+          v-if="pkey === 'id'"
+          :label="pkey"
+          :value="state.item[pkey]")
         FieldText(
-          v-if="p.type === 'string' && p.format === 'text'"
+          v-else-if="p.type === 'string' && p.format === 'text'"
           :label="pkey"
           :value="state.item[pkey]")
         FieldBoolean(
@@ -25,9 +27,15 @@ div(
           @update="fieldUpdated(pkey, $event)")
         FieldNumber(
           v-else-if="p.type === 'integer'"
+          :label="pkey"
           :value="state.item[pkey]")
-        FieldObject(
+        FieldRef(
           v-else-if="p.type === 'string' && p.format === 'uuid'"
+          :label="pkey"
+          :value="state.item[pkey]")
+        FieldJSONB(
+          v-else-if="p.type === 'string' && p.format === 'jsonb'"
+          :label="pkey"
           :value="state.item[pkey]")
   //- actions
   .row.full-width.q-px-md.q-py-sm
@@ -38,18 +46,23 @@ div(
 <script>
 import { defineComponent, reactive, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useQuasar } from 'quasar'
+
+import FieldID from './FieldID.vue'
 import FieldText from './FieldText.vue'
 import FieldBoolean from './FieldBoolean.vue'
 import FieldNumber from './FieldNumber.vue'
-import FieldObject from './FieldObject.vue'
+import FieldRef from './FieldRef.vue'
+import FieldJSONB from './FieldJSONB.vue'
 
 export default defineComponent({
   name: 'ItemEditor',
   components: {
+    FieldID,
     FieldText,
     FieldBoolean,
     FieldNumber,
-    FieldObject
+    FieldRef,
+    FieldJSONB
   },
   props: ['item', 'definition'],
   emits: ['item-changed', 'close'],

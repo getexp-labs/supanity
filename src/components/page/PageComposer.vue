@@ -3,7 +3,7 @@
 
 <template lang="pug">
 component(
-  :is="pageComponent")
+  :is="pageComponent" :key="route.path")
 </template>
 
 <script >

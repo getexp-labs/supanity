@@ -60,26 +60,34 @@ export default defineComponent({
     })
 
     const tableUrl = computed(() => {
-      if (state.tableId === 'offers') {
-        return `/${state.tableId}?select=*,cover_image(*),gallery_images(*)`
-      } else {
-        return `/${state.tableId}`
-      }
+      let base = `/${state.tableId}?select=*`
+      Object
+        .entries(state.definition.properties)
+        .reduce((acc, [key, val]) => {
+          if (val.type === 'string' && val.format === 'uuid' && key !== 'id') {
+            base += `,${key}(*)`
+          }
+          return acc
+        }, '')
+      return base
     })
     const { data: items, error: itemsError } = useSWRV(tableUrl.value, fetcher)
 
     const itemsColumns = computed(() => {
       return Object.entries(state.definition.properties).map(([key, val]) => {
-        let style = ''
-        if (key === 'id') {
-          style = 'max-width: 60px; overflow: hidden'
-        }
-        return {
+        const r = {
           name: key,
           label: key,
-          field: key,
-          style: style
+          field: key
         }
+        if (key === 'id') {
+          r.style = 'max-width: 60px; overflow: hidden'
+        } else if (val.type === 'string' && val.format === 'jsonb') {
+          r.format = (val, row) => {
+            return JSON.stringify(val)
+          }
+        }
+        return r
       })
     })
 
@@ -112,7 +120,8 @@ export default defineComponent({
       state,
       itemClick,
       itemCreate,
-      itemChangedTryClose
+      itemChangedTryClose,
+      tableUrl
     }
   }
 })

@@ -1,22 +1,18 @@
 <style lang="scss" scoped>
-pre {
-  font-size: 12px;
-  padding: 8px;
-}
 </style>
 
 <template lang="pug">
-.row.full-width.bg-grey
-  pre {{value}}
+div(:style=`{borderRadius: '4px'}`).row.full-width.bg-grey-3.q-pa-sm.cursor-pointer
+  small {{ value }}
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'FieldFiles',
+  name: 'FieldId',
   props: {
-    value: { type: Object }
+    value: { type: String }
   },
   setup () {
     return {

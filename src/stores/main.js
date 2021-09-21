@@ -10,14 +10,16 @@ const PAGE_GROUPS = [
     pages: [
       { id: 'schema', type: 'page', name: 'Schema', body: { type: 'schema' } },
       { id: 'roles', type: 'page', name: 'Roles', body: { type: 'roles' } }
-    ]
+    ],
+    isOpened: true
   },
   {
     id: 'views',
     type: 'group',
     name: 'Views',
     pages: [
-    ]
+    ],
+    isOpened: false
   }
 ]
 
