@@ -1,4 +1,11 @@
-<style lang="scss" scoped>
+<style lang="scss">
+.q-table {
+  tr {
+    &:hover {
+      background: #eee;
+    }
+  }
+}
 </style>
 
 <template lang="pug">
@@ -24,6 +31,7 @@ q-page.q-pa-md
     dense flat
     :rows="items"
     :columns="itemsColumns"
+    :style="{minHeight: '50vh'}"
     @row-click="itemClick")
 </template>
 
@@ -32,6 +40,7 @@ import useSWRV from 'swrv'
 import { defineComponent, ref, computed, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useStoreMain } from 'src/stores/main.js'
 import ItemEditor from 'components/item/ItemEditor.vue'
+import { fetcher } from 'boot/api'
 
 export default defineComponent({
   name: 'PageTable',
@@ -49,22 +58,27 @@ export default defineComponent({
       item: null,
       itemChanged: false
     })
-    // const { data: items, error: itemsError } = useSWRV(`/${tableId.value}?select=*`, fetcher)
-    const tables = {
-      offers: [
-        { id: '1', title: 'Offer one', game_id: null, discount_id: null },
-        { id: '2', title: 'Offer two', game_id: null, discount_id: null }
-      ]
-    }
-    const items = computed(() => {
-      return tables[state.tableId] || []
+
+    const tableUrl = computed(() => {
+      if (state.tableId === 'offers') {
+        return `/${state.tableId}?select=*,cover_image(*),gallery_images(*)`
+      } else {
+        return `/${state.tableId}`
+      }
     })
+    const { data: items, error: itemsError } = useSWRV(tableUrl.value, fetcher)
+
     const itemsColumns = computed(() => {
       return Object.entries(state.definition.properties).map(([key, val]) => {
+        let style = ''
+        if (key === 'id') {
+          style = 'max-width: 60px; overflow: hidden'
+        }
         return {
           name: key,
           label: key,
-          field: key
+          field: key,
+          style: style
         }
       })
     })

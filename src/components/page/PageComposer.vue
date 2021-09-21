@@ -27,9 +27,9 @@ export default defineComponent({
     const storeMain = useStoreMain()
 
     const pageComponent = computed(() => {
-      if (storeMain.page.body.type === 'schema') return PageSchema
-      if (storeMain.page.body.type === 'table') return PageTable
-      if (storeMain.page.body.type === 'roles') return PageRoles
+      if (storeMain.page?.body?.type === 'schema') return PageSchema
+      if (storeMain.page?.body?.type === 'table') return PageTable
+      if (storeMain.page?.body?.type === 'roles') return PageRoles
       else return PageUnknown
     })
 

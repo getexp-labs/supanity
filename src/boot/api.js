@@ -12,6 +12,9 @@ import { useStoreMain } from 'src/stores/main.js'
 // const api = axios.create({ baseURL: 'https://api.example.com' })
 
 export default boot(({ app }) => {
+  // app.get('/api/hello', (req, res) => {
+  //   res.json({ hello: 'dick' })
+  // })
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
   // app.config.globalProperties.$axios = axios
@@ -35,7 +38,8 @@ export const fetcher = async (key) => {
       method: 'GET',
       headers: {
         apikey: supabase.supabaseKey,
-        Authorization: `Bearer ${supabase.auth.session()?.access_token}`
+        Authorization: `Bearer ${supabase.supabaseKey}`
+        // Authorization: `Bearer ${supabase.auth.session()?.access_token}`
       }
     })
   return response.json()

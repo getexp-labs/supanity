@@ -11,8 +11,8 @@ q-page().q-pa-md.scroll
     div(
       v-for="(d,dkey) in schema?.definitions" :key="dkey"
       :style=`{
-        minWidth: '220px',
-        maxWidth: '220px',
+        minWidth: '200px',
+        maxWidth: '200px',
       }`
       ).definition.row.items-start.content-start.q-mr-sm
       .row.full-width.q-pa-sm

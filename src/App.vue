@@ -11,6 +11,6 @@ export default defineComponent({
 
 <script setup>
 import { useStoreMain } from 'src/stores/main.js'
-const storeMain = useStoreMain()
-storeMain.supabaseInit()
+// const storeMain = useStoreMain()
+// storeMain.supabaseInit()
 </script>

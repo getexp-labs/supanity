@@ -10,7 +10,7 @@
 <template lang="pug">
 .column.fit.items-start.content-start.justify-start
   div(:style=`{height: '50px'}`).row.full-width.items-center.content-center.bg-primary.q-px-md
-    span(:style=`{fontSize: '18px'}`).text-bold.text-white Admin
+    span(:style=`{fontSize: '18px'}`).text-bold.text-white Supanity
   .col.full-width.scroll
     .row.full-width.items-start.content-start
       //- group
@@ -20,7 +20,7 @@
         //- group header
         div(
           @click="g.isOpened = !g.isOpened"
-          ).row.full-width.items-center.content-center.q-py-md.justify-between.cursor-pointer
+          ).row.full-width.items-center.content-center.q-py-sm.justify-between.cursor-pointer
           span {{g.name}}
           q-icon(:name="g.isOpened ? 'keyboard_arrow_down' : 'keyboard_arrow_up'")
         //- pages

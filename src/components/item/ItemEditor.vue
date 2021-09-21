@@ -8,15 +8,27 @@ div(
   div(style="height: 50px;").row.full-width.items-center.content-center.q-px-md.bg-primary
     span(style="font-size: 18px").text-bold.text-white {{ state.item.title }}
   .col.full-width.scroll
-    .row.full-width.items-start.content-start.q-px-md
+    div(style="margin-bottom: 50vh").row.full-width.items-start.content-start.q-px-md.q-pt-md
       div(
         v-for="(p,pkey) in definition.properties" :key="pkey"
         ).row.full-width.q-mb-sm
-        .row.full-width.q-px-sm
+        //- .row.full-width.q-px-sm
           span {{pkey}}
-        q-input(
-          dense filled hide-bottom-space
-          v-model="state.item[pkey]").full-width.text-black
+        FieldText(
+          v-if="p.type === 'string' && p.format === 'text'"
+          :label="pkey"
+          :value="state.item[pkey]")
+        FieldBoolean(
+          v-else-if="p.type === 'boolean'"
+          :label="pkey"
+          :value="state.item[pkey]"
+          @update="fieldUpdated(pkey, $event)")
+        FieldNumber(
+          v-else-if="p.type === 'integer'"
+          :value="state.item[pkey]")
+        FieldObject(
+          v-else-if="p.type === 'string' && p.format === 'uuid'"
+          :value="state.item[pkey]")
   //- actions
   .row.full-width.q-px-md.q-py-sm
     q-btn(dense no-caps color="primary").q-px-sm.q-mr-sm Update
@@ -26,9 +38,19 @@ div(
 <script>
 import { defineComponent, reactive, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useQuasar } from 'quasar'
+import FieldText from './FieldText.vue'
+import FieldBoolean from './FieldBoolean.vue'
+import FieldNumber from './FieldNumber.vue'
+import FieldObject from './FieldObject.vue'
 
 export default defineComponent({
   name: 'ItemEditor',
+  components: {
+    FieldText,
+    FieldBoolean,
+    FieldNumber,
+    FieldObject
+  },
   props: ['item', 'definition'],
   emits: ['item-changed', 'close'],
   setup (props, ctx) {
@@ -41,7 +63,10 @@ export default defineComponent({
       deleting: false,
       changed: false
     })
-
+    const fieldUpdated = (k, val) => {
+      console.log('fieldUpdated', k, val)
+      state.item[k] = val
+    }
     const itemUpdate = () => {
       console.log('[ItemEditor] itemUpdate')
       state.changed = false
@@ -53,7 +78,7 @@ export default defineComponent({
     watch(
       () => state.item,
       (to, from) => {
-        console.log('[ItemEditor] W state.item', to, from)
+        console.log('[ItemEditor] W state.item')
         if (to && from) {
           state.changed = true
           ctx.emit('item-changed')
@@ -96,7 +121,8 @@ export default defineComponent({
       state,
       itemUpdate,
       itemDelete,
-      tryItemClose
+      tryItemClose,
+      fieldUpdated
     }
   }
 })

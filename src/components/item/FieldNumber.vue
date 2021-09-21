@@ -2,15 +2,19 @@
 </style>
 
 <template lang="pug">
-.row.full-width.q-pa-md
-  span Work in progress...
+q-input(
+  dense filled hide-bottom-space
+  v-model="value").full-width.text-black
 </template>
 
-<script >
+<script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'PageRoles',
+  name: 'FieldNumber',
+  props: {
+    value: { type: String }
+  },
   setup () {
     return {
     }
