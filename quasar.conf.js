@@ -22,6 +22,7 @@ module.exports = configure(function (ctx) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
     boot: [
+      'init',
       'i18n',
       'api',
       'pinia'
@@ -86,7 +87,10 @@ module.exports = configure(function (ctx) {
       open: true, // opens browser window automatically
       proxy: {
         '/api': 'http://localhost:3000'
-      }
+      },
+      watchFiles: [
+        '/node_modules/quasar-app-extension-sn-ext/*'
+      ]
     },
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
@@ -105,7 +109,8 @@ module.exports = configure(function (ctx) {
 
       // Quasar plugins
       plugins: [
-        'Dialog'
+        'Dialog',
+        'Notify'
       ]
     },
 

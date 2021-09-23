@@ -1,30 +1,41 @@
 {
   "name": "@getexp-labs/supanity",
-  "version": "0.0.2",
+  "version": "0.0.7",
   "description": "supanity",
   "productName": "supanity",
   "author": "ivanq3w <ivanq3w@gmail.com>",
   "private": false,
+  "bin": {
+    "dev": "cli/dev.js",
+    "info": "cli/info.js",
+    "ext-add": "cli/ext-add.js"
+  },
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
-    "dev": "npx quasar dev -m spa",
-    "build": "npx quasar build -m spa"
-  },
-  "bin": {
-    "dev": "cli/dev.js"
+    "front:dev": "npx quasar dev -m spa",
+    "front:build": "npx quasar build -m spa",
+    "server:dev": "nodemon ./server.js",
+    "server:build": "pkg .",
+    "ext:uninvoke": "npx quasar ext uninvoke sn-ext",
+    "ext:invoke": "npx quasar ext invoke sn-ext"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "@supabase/supabase-js": "^1.22.3",
     "@vueuse/core": "^6.0.0",
     "axios": "^0.21.1",
+    "connect-history-api-fallback": "^1.6.0",
     "core-js": "^3.6.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fs-extra": "^10.0.0",
     "gsap": "^3.7.1",
     "pinia": "^2.0.0-rc.9",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
-    "quasar": "^2.0.0",
+    "serve-static": "^1.14.1",
+    "shelljs": "^0.8.4",
     "swrv": "^1.0.0-beta.8",
     "vue-i18n": "^9.0.0-beta.0"
   },
@@ -38,7 +49,9 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^7.0.0",
-    "eslint-webpack-plugin": "^2.4.0"
+    "eslint-webpack-plugin": "^2.4.0",
+    "nodemon": "^2.0.12",
+    "quasar": "^2.1.0"
   },
   "browserslist": [
     "last 10 Chrome versions",
@@ -65,5 +78,26 @@
   "bugs": {
     "url": "https://github.com/getexp-labs/supanity/issues"
   },
-  "homepage": "https://github.com/getexp-labs/supanity#readme"
+  "homepage": "https://github.com/getexp-labs/supanity#readme",
+  "pkg:meta": {
+    "assets": [
+      "dist/spa/**/*",
+      "cli/**/*"
+    ],
+    "outputPath": "server",
+    "targets": [
+      "node14-linux-arm64",
+      "node14-win-x64"
+    ]
+  },
+  "pkg": {
+    "scripts": "server.js",
+    "outputPath": "../supanity-test",
+    "targets": [
+      "node14-win-x64"
+    ],
+    "assets": [
+      "./**/*"
+    ]
+  }
 }

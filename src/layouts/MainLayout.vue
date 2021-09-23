@@ -5,8 +5,9 @@ q-layout(view="lHh Lpr lFf")
       q-btn(flat dense round icon="menu" aria-label="Menu" @click="state.leftDrawerOpened = !state.leftDrawerOpened")
       q-toolbar-title {{storeMain?.page?.name}}
   q-drawer(
+    v-model="state.leftDrawerOpened" show-if-above bordered
     :width="220"
-    ).bg-grey-1(v-model="state.leftDrawerOpened" show-if-above bordered)
+    ).bg-grey-1
     Drawer
   q-page-container
     router-view

@@ -1,5 +1,6 @@
 <template lang="pug">
-router-view
+//- router-view
+sn-shit
 </template>
 
 <script>
