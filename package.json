@@ -1,24 +1,16 @@
 {
-  "name": "@getexp-labs/supanity",
-  "version": "0.0.7",
+  "name": "supanity",
+  "version": "0.0.1",
   "description": "supanity",
   "productName": "supanity",
   "author": "ivanq3w <ivanq3w@gmail.com>",
   "private": false,
-  "bin": {
-    "dev": "cli/dev.js",
-    "info": "cli/info.js",
-    "ext-add": "cli/ext-add.js"
-  },
   "scripts": {
-    "lint": "eslint --ext .js,.vue ./",
-    "test": "echo \"No test specified\" && exit 0",
-    "front:dev": "npx quasar dev -m spa",
-    "front:build": "npx quasar build -m spa",
-    "server:dev": "nodemon ./server.js",
-    "server:build": "pkg .",
-    "ext:uninvoke": "npx quasar ext uninvoke sn-ext",
-    "ext:invoke": "npx quasar ext invoke sn-ext"
+    "dev": "npx quasar dev -m spa",
+    "build": "npx quasar build -m spa",
+    "ext:i": "npm i ../",
+    "ext:add": "npx quasar ext invoke sn-ext",
+    "ext:del": "npx quasar ext uninvoke sn-ext"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
@@ -74,30 +66,9 @@
     "type": "git",
     "url": "git+https://github.com/getexp-labs/supanity.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/getexp-labs/supanity/issues"
   },
-  "homepage": "https://github.com/getexp-labs/supanity#readme",
-  "pkg:meta": {
-    "assets": [
-      "dist/spa/**/*",
-      "cli/**/*"
-    ],
-    "outputPath": "server",
-    "targets": [
-      "node14-linux-arm64",
-      "node14-win-x64"
-    ]
-  },
-  "pkg": {
-    "scripts": "server.js",
-    "outputPath": "../supanity-test",
-    "targets": [
-      "node14-win-x64"
-    ],
-    "assets": [
-      "./**/*"
-    ]
-  }
+  "homepage": "https://github.com/getexp-labs/supanity#readme"
 }

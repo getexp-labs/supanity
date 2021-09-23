@@ -5,17 +5,9 @@
     "src/i18n"
   ],
   "i18n-ally.sortKeys": true,
-  "prettier.enable": false,
   "typescript.tsdk": "node_modules/typescript/lib",
-  "volar.tsPlugin": true,
-  "volar.tsPluginStatus": false,
+  "volar.tsPlugin": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,
-  },
-  "files.associations": {
-    "*.css": "postcss",
-  },
-  "emmet.includeLanguages": {
-    "postcss": "css"
-  },
+  }
 }

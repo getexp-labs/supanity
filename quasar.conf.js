@@ -49,9 +49,11 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
+      distDir: '../dist',
       vueRouterMode: 'history', // available values: 'hash', 'history'
 
-      env: require('dotenv').config().parsed,
+      // env: require('dotenv').config().parsed,
+      env: require('dotenv').config({path: '../'}).parsed,
       // transpile: false,
 
       // Add dependencies for transpiling with Babel (Array of string/regex)
@@ -73,6 +75,7 @@ module.exports = configure(function (ctx) {
       chainWebpack (chain) {
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
+        // Add pug
         chain.module.rule('pug')
           .test(/\.pug$/)
           .use('pug-plain-loader')
@@ -86,10 +89,10 @@ module.exports = configure(function (ctx) {
       port: 8080,
       open: true, // opens browser window automatically
       proxy: {
-        '/api': 'http://localhost:3000'
+        // '/api': 'http://localhost:3000'
       },
       watchFiles: [
-        '/node_modules/quasar-app-extension-sn-ext/*'
+        // '/node_modules/quasar-app-extension-sn-ext/*'
       ]
     },
 
