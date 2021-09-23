@@ -1,15 +1,18 @@
 {
-  "name": "supanity",
+  "name": "@getexp-labs/supanity",
   "version": "0.0.2",
   "description": "supanity",
   "productName": "supanity",
   "author": "ivanq3w <ivanq3w@gmail.com>",
-  "private": true,
+  "private": false,
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "npx quasar dev -m spa",
     "build": "npx quasar build -m spa"
+  },
+  "bin": {
+    "dev": "cli/dev.js"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
@@ -52,5 +55,15 @@
     "node": ">= 12.22.1",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
-  }
+  },
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getexp-labs/supanity.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/getexp-labs/supanity/issues"
+  },
+  "homepage": "https://github.com/getexp-labs/supanity#readme"
 }
