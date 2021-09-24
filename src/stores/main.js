@@ -47,7 +47,10 @@ export const useStoreMain = defineStore('main', {
   actions: {
     initSupabase () {
       console.log('[initSupabase]')
-      this.supabase = createClient(process.env.VUE_APP_SUPABASE_URL, process.env.VUE_APP_SUPABASE_KEY)
+      const SUPABASE_PROJECT_ID = process.env.SUPABASE_PROJECT_ID
+      const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY
+      const SUPABASE_CLIENT_URL = `https://${SUPABASE_PROJECT_ID}.supabase.co`
+      this.supabase = createClient(SUPABASE_CLIENT_URL, SUPABASE_ANON_KEY)
       // console.log('[initSupabase]', this.supabase)
     },
     setPages (schema) {

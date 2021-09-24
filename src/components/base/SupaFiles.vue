@@ -29,9 +29,9 @@ const props = defineProps({
 const files = computed(() => {
   if (props.file && props.file.type === 'file') {
     return props.file.data.map(f => {
+      const SUPABASE_PROJECT_ID = process.env.SUPABASE_PROJECT_ID
       return {
-        url: `${process.env.VUE_APP_SUPABASE_STORAGE_URL}/storage/v1/object/public/public/files/${props.file.id}/${f.filename}`,
-        // url2: 'https://tutoudzncttbsezeimjo.supabase.in/storage/v1/object/public/public/files/4716ead5-350f-4aec-ae69-2f9e361b62c4/file.jpg',
+        url: `https://${SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/public/files/${props.file.id}/${f.filename}`,
         type: f.type,
         base_color: f.base_color,
         filename: f.filename

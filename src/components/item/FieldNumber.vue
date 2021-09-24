@@ -13,7 +13,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'FieldNumber',
   props: {
-    value: { type: String }
+    value: { type: [Number, String] }
   },
   setup () {
     return {
