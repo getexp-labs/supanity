@@ -8,9 +8,10 @@ console.log('__dirname', __dirname)
 
 const app = express()
 
-app.get('/api/hello', (req, res) => {
-  console.log('/api/good')
-  res.json({ all: 'good' })
+const normalizedPath = path.join(__dirname, 'api')
+fs.readdirSync(normalizedPath).forEach(function(file) {
+  const [routePath, fileExtension] = file.split('.')
+  if (fileExtension === 'js') app.use(`/api/${routePath}`, require(`./api/${file}`))
 })
 
 app.use(history())

@@ -14,11 +14,8 @@ export default boot(({ app, router }) => {
   const storeMain = useStoreMain()
 
   router.beforeEach((to, from, next) => {
-    console.log('[router] beforeEach')
-    // TODO add auth guards and check token sessions, and user profile fetch
-    // const storeMain = useStoreMain()
+    console.log('[pinia] router.beforeEach')
     if (!storeMain.supabase) storeMain.initSupabase()
-    // if (!storeMain.ready) storeMain.init()
     next()
   })
 })

@@ -77,6 +77,8 @@ module.exports = {
 
     // custom rules
     'no-unused-vars': 'off',
-    'no-undef': 'off'
+    'no-undef': 'off',
+    'camelcase': 'off',
+    'brace-style': 'off'
   }
 }

@@ -2,8 +2,9 @@
 q-layout(view="lHh Lpr lFf")
   q-header()
     q-toolbar
-      q-btn(flat dense round icon="menu" aria-label="Menu" @click="state.leftDrawerOpened = !state.leftDrawerOpened")
+      q-btn(flat dense icon="menu" aria-label="Menu" @click="state.leftDrawerOpened = !state.leftDrawerOpened")
       q-toolbar-title {{storeMain?.page?.name}}
+      q-btn(flat dense icon="logout" @click="storeMain.userSignOut()")
   q-drawer(
     v-model="state.leftDrawerOpened" show-if-above bordered
     :width="220"

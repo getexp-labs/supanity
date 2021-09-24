@@ -12,6 +12,16 @@ import { useStoreMain } from 'src/stores/main.js'
 // const api = axios.create({ baseURL: 'https://api.example.com' })
 
 export default boot(({ app }) => {
+  console.log('[boot] start')
+  const storeMain = useStoreMain()
+  const user_id = localStorage.getItem('user_id')
+  if (user_id) {
+    console.log('[boot] user_id FOUND')
+    storeMain.user_id = user_id
+  }
+  else {
+    console.log('[boot] user_id NOT FOUND')
+  }
   // app.get('/api/hello', (req, res) => {
   //   res.json({ hello: 'dick' })
   // })
@@ -38,8 +48,9 @@ export const fetcher = async (key) => {
       method: 'GET',
       headers: {
         apikey: supabase.supabaseKey,
-        Authorization: `Bearer ${supabase.supabaseKey}`
-        // Authorization: `Bearer ${supabase.auth.session()?.access_token}`
+        // Authorization: `Bearer ${supabase.supabaseKey}`
+        Authorization: `Bearer ${supabase.auth.session()?.access_token}`
+        // Authorization: `Beare`
       }
     })
   return response.json()
