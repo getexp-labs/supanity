@@ -56,7 +56,13 @@ module.exports = configure(function (ctx) {
       // env: require('dotenv').config().parsed,
       // env: require('dotenv').config({ path: '../' }).parsed,
       // env: require('dotenv').config({ path: path.resolve(process.cwd(), '..', '.env') }).parsed,
-      env: process.env.NODE_ENV === 'production' ? require('dotenv').config({ path: path.resolve(process.cwd(), '..', '.env') }).parsed : null,
+      env:
+        process.env.NODE_ENV === 'production'
+          ? {
+              SUPABASE_PROJECT_ID: process.env.SUPABASE_PROJECT_ID,
+              SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY
+            }
+          : require('dotenv').config({ path: path.resolve(process.cwd(), '..', '.env') }).parsed,
       // transpile: false,
 
       // Add dependencies for transpiling with Babel (Array of string/regex)
