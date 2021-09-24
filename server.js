@@ -4,6 +4,8 @@ const history = require('connect-history-api-fallback')
 const PORT = process.env.PORT || 3000
 const path = require('path')
 
+console.log('__dirname', __dirname)
+
 const app = express()
 
 app.get('/api/hello', (req, res) => {
@@ -12,8 +14,8 @@ app.get('/api/hello', (req, res) => {
 })
 
 app.use(history())
-console.log('__dirname', __dirname)
 app.use(serveStatic(path.join(__dirname, '..', 'dist')))
+
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`)
 })

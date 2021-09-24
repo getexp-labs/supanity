@@ -9,6 +9,7 @@
 /* eslint-env node */
 const ESLintPlugin = require('eslint-webpack-plugin')
 const { configure } = require('quasar/wrappers')
+const path = require('path')
 
 module.exports = configure(function (ctx) {
   return {
@@ -53,7 +54,9 @@ module.exports = configure(function (ctx) {
       vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // env: require('dotenv').config().parsed,
-      env: require('dotenv').config({ path: '../' }).parsed,
+      // env: require('dotenv').config({ path: '../' }).parsed,
+      // env: require('dotenv').config({ path: path.resolve(process.cwd(), '..', '.env') }).parsed,
+      env: process.env.NODE_ENV === 'production' ? require('dotenv').config({ path: path.resolve(process.cwd(), '..', '.env') }).parsed : null,
       // transpile: false,
 
       // Add dependencies for transpiling with Babel (Array of string/regex)
