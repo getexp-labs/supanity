@@ -79,6 +79,7 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-undef': 'off',
     'camelcase': 'off',
-    'brace-style': 'off'
+    'brace-style': 'off',
+    'comma-dangle': 'off'
   }
 }

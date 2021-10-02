@@ -8,6 +8,7 @@
 
 /* eslint-env node */
 const ESLintPlugin = require('eslint-webpack-plugin')
+const AutoImportPlugin = require('unplugin-auto-import/webpack')
 const { configure } = require('quasar/wrappers')
 const path = require('path')
 
@@ -24,7 +25,6 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli/boot-files
     boot: [
       'pinia',
-      'init',
       'i18n',
       'api',
     ],
@@ -50,12 +50,9 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
+      // TODO handle it oustide of supanity folder
       distDir: '../dist',
       vueRouterMode: 'history', // available values: 'hash', 'history'
-
-      // env: require('dotenv').config().parsed,
-      // env: require('dotenv').config({ path: '../' }).parsed,
-      // env: require('dotenv').config({ path: path.resolve(process.cwd(), '..', '.env') }).parsed,
       env:
         process.env.NODE_ENV === 'production'
           ? {
@@ -82,8 +79,31 @@ module.exports = configure(function (ctx) {
       // https://v2.quasar.dev/quasar-cli/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpack (chain) {
+        // chain.resolve.alias
+        //   .set('~', path.resolve(__dirname, './src'))
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
+        chain.plugin('unplugin-auto-import')
+          .use(AutoImportPlugin({
+            imports: [
+              'vue',
+              'vue-router',
+              // 'vue-i18n',
+              // '@vueuse/head',
+              // '@vueuse/core',
+            ],
+            dts: true,
+            // resolvers: [
+            //   (name) => {
+            //     if (name === 'useQuasar') {
+            //       console.log('name', name)
+            //       return { importName: name, path: 'quasar' }
+            //     }
+            //   }
+            // ]
+          }))
+        // chain.plugin('eslint-webpack-plugin')
+        //   .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
         // Add pug
         chain.module.rule('pug')
           .test(/\.pug$/)
@@ -101,7 +121,7 @@ module.exports = configure(function (ctx) {
         // '/api': 'http://localhost:3000'
       },
       watchFiles: [
-        // '/node_modules/quasar-app-extension-sn-ext/*'
+        // '/node_modules/quasar-app-extension-sn/*'
       ]
     },
 
@@ -167,9 +187,9 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'supabase-admin',
-        short_name: 'supabase-admin',
-        description: 'supabase-admin',
+        name: 'gg-admin',
+        short_name: 'gg-admin',
+        description: 'gg-admin',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
@@ -234,7 +254,7 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'supabase-admin'
+        appId: 'gg-admin'
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain

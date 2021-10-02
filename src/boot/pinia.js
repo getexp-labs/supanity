@@ -11,11 +11,11 @@ export default boot(({ app, router }) => {
   //   store.router = markRaw(router)
   // })
   app.use(pinia)
-  const storeMain = useStoreMain()
+  // const storeMain = useStoreMain()
 
-  router.beforeEach((to, from, next) => {
-    console.log('[pinia] router.beforeEach')
-    if (!storeMain.supabase) storeMain.initSupabase()
-    next()
-  })
+  // router.beforeEach((to, from, next) => {
+  //   console.log('[pinia] router.beforeEach')
+  //   if (!storeMain.supabase) storeMain.initSupabase()
+  //   next()
+  // })
 })

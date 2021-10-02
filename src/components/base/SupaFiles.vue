@@ -9,6 +9,7 @@
   .row.full-width.justify-start.items-start.content-start.q-py-sm
     div(
       v-for="(i,ii) in files" :key="ii"
+      @click="open"
       ).row
       img(
         draggable="false"
@@ -19,7 +20,10 @@
 <script setup>
 import { computed } from 'vue'
 import { useStoreMain } from 'src/stores/main'
+import { useQuasar } from 'quasar'
+import SupaFilesEditor from './SupaFilesEditor.vue'
 
+const $q = useQuasar()
 const storeMain = useStoreMain()
 
 const props = defineProps({
@@ -41,4 +45,13 @@ const files = computed(() => {
     return []
   }
 })
+const open = () => {
+  console.log('open')
+  $q.dialog({
+    component: SupaFilesEditor,
+    componentProps: {
+      file: props.file,
+    }
+  })
+}
 </script>

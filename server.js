@@ -8,11 +8,11 @@ console.log('__dirname', __dirname)
 
 const app = express()
 
-const normalizedPath = path.join(__dirname, 'api')
-fs.readdirSync(normalizedPath).forEach(function(file) {
-  const [routePath, fileExtension] = file.split('.')
-  if (fileExtension === 'js') app.use(`/api/${routePath}`, require(`./api/${file}`))
-})
+// const normalizedPath = path.join(__dirname, 'api')
+// fs.readdirSync(normalizedPath).forEach(function (file) {
+//   const [routePath, fileExtension] = file.split('.')
+//   if (fileExtension === 'js') app.use(`/api/${routePath}`, require(`./api/${file}`))
+// })
 
 app.use(history())
 app.use(serveStatic(path.join(__dirname, '..', 'dist')))

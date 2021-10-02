@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from 'boot/api'
 
 const PAGE_GROUPS = [
   {
@@ -40,14 +40,14 @@ const PAGE_GROUPS = [
 
 export const useStoreMain = defineStore('main', {
   state: () => ({
-    ready: false,
-    token: null,
-    currentUser: null,
-    pages: PAGE_GROUPS,
-    supabase: null,
-    userAuth: null,
+    // ready: false,
+    // token: null,
+    // currentUser: null,
+    // supabase: null,
     user: null,
-    user_id: null
+    userAuth: null,
+    pages: PAGE_GROUPS,
+    // user_id: null
   }),
   getters: {
     route () {
@@ -65,23 +65,26 @@ export const useStoreMain = defineStore('main', {
   actions: {
     initSupabase () {
       console.log('[initSupabase]')
-      const SUPABASE_PROJECT_ID = process.env.SUPABASE_PROJECT_ID
-      const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY
-      const SUPABASE_CLIENT_URL = `https://${SUPABASE_PROJECT_ID}.supabase.co`
-      this.supabase = createClient(SUPABASE_CLIENT_URL, SUPABASE_ANON_KEY)
-      this.supabase.auth.onAuthStateChange(async (event, session) => {
-        console.log('[authStateChange]', event, session)
-        if (session?.user) {
-          localStorage.setItem('user_id', session.user.id)
-          this.userAuth = session.user
-          await this.userGet(session.user.id)
-        }
-        else {
-          storeMain.user_id = null
-          localStorage.removeItem('user_id')
-          this.router.replace('/auth')
-        }
-      })
+      // const SUPABASE_PROJECT_ID = process.env.SUPABASE_PROJECT_ID
+      // const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY
+      // const SUPABASE_CLIENT_URL = `https://${SUPABASE_PROJECT_ID}.supabase.co`
+      // this.supabase = createClient(SUPABASE_CLIENT_URL, SUPABASE_ANON_KEY)
+      // this.supabase.auth.onAuthStateChange(async (event, session) => {
+      //   console.log('[authStateChange]', event, session)
+      //   if (session?.user) {
+      //     localStorage.setItem('user_id', session.user.id)
+      //     this.userAuth = session.user
+      //     await this.userGet(session.user.id)
+      //   }
+      //   else {
+      //     storeMain.user_id = null
+      //     localStorage.removeItem('user_id')
+      //     this.router.replace('/auth')
+      //   }
+      // })
+    },
+    pagesGet () {
+      return []
     },
     setPages (schema) {
       if (!schema) return
@@ -101,31 +104,34 @@ export const useStoreMain = defineStore('main', {
       this.pages = PAGE_GROUPS.map(g => g.id === 'database' ? { ...g, pages: [...g.pages, ...tables] } : { ...g })
     },
     async userSignIn () {
-      console.log('userSignIn start')
+      console.log('[userSignIn] start')
       const redirectTo = `${window.location.origin}`
-      console.log('userSignIn redirectTo', redirectTo)
-      const { user, session, error } = await this.supabase.auth.signIn({
+      console.log('[userSignIn] redirectTo', redirectTo)
+      const { user, session, error } = await supabase.auth.signIn({
         provider: 'discord'
       }, { redirectTo, scopes: 'identify email guilds.join' })
+      localStorage.setItem('auth_waiting', true)
+      console.log('[userSignIn] done')
     },
     async userSignOut () {
       console.log('[userSignOut] start')
-      const { error } = await this.supabase.auth.signOut()
-      this.userAuth = null
-      this.user = null
-      console.log('[userSignOut]')
+      const { error } = await supabase.auth.signOut()
+      // this.user = null
+      // this.userAuth = null
+      console.log('[userSignOut] done')
+      window.location.reload()
     },
     async userGet (id) {
       console.log('[userGet]', id)
       if (!id) return
-      const { data: [user] } = await this.supabase.from('users').select().eq('id', id)
+      const { data: [user] } = await supabase.from('users').select().eq('id', id)
       if (user) {
         this.user = user
       }
     },
-    init () {
-      console.log('[main] init')
-      this.ready = true
-    }
+    // init () {
+    //   console.log('[main] init')
+    //   this.ready = true
+    // }
   }
 })

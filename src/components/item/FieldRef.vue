@@ -7,7 +7,6 @@ pre {
 </style>
 
 <template lang="pug">
-
 SupaFiles(
   v-if="value?.type === 'file'"
   :title="label"
@@ -34,7 +33,9 @@ export default defineComponent({
   },
   props: {
     value: { type: Object, required: true },
-    label: { type: String }
+    label: { type: String },
+    definition: { type: Object, required: true },
+    fieldKey: { type: Object, required: true },
   },
   setup () {
     return {

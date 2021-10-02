@@ -15,38 +15,55 @@ div(
         FieldID(
           v-if="pkey === 'id'"
           :label="pkey"
-          :value="state.item[pkey]")
+          :value="state.item[pkey]"
+          :definition="p"
+          :fieldKey="pkey")
         FieldText(
           v-else-if="p.type === 'string' && p.format === 'text'"
           :label="pkey"
-          :value="state.item[pkey]")
+          :value="state.item[pkey]"
+          :definition="p"
+          :fieldKey="pkey")
         FieldBoolean(
           v-else-if="p.type === 'boolean'"
           :label="pkey"
           :value="state.item[pkey]"
+          :definition="p"
+          :fieldKey="pkey"
           @update="fieldUpdated(pkey, $event)")
         FieldNumber(
           v-else-if="p.type === 'integer'"
           :label="pkey"
-          :value="state.item[pkey]")
+          :value="state.item[pkey]"
+          :definition="p"
+          :fieldKey="pkey")
         FieldRef(
           v-else-if="p.type === 'string' && p.format === 'uuid'"
           :label="pkey"
-          :value="state.item[pkey]")
+          :value="state.item[pkey]"
+          :definition="p"
+          :fieldKey="pkey")
         FieldJSONB(
           v-else-if="p.type === 'string' && p.format === 'jsonb'"
           :label="pkey"
-          :value="state.item[pkey]")
+          :value="state.item[pkey]"
+          :definition="p"
+          :fieldKey="pkey")
   //- actions
   .row.full-width.q-px-md.q-py-sm
-    q-btn(dense no-caps color="primary").q-px-sm.q-mr-sm Update
-    q-btn(dense no-caps outline color="red").q-px-sm Delete
+    //- TODO create
+    q-btn(
+      dense no-caps color="primary"
+      @click="handleUpdate").q-px-sm.q-mr-sm Update
+    q-btn(
+      dense no-caps outline color="red"
+      @click="handleDelete").q-px-sm Delete
 </template>
 
 <script>
-import { defineComponent, reactive, onMounted, onBeforeUnmount, watch } from 'vue'
+import { defineComponent, reactive, onMounted, onBeforeUnmount, watch, inject } from 'vue'
 import { useQuasar } from 'quasar'
-
+import { supabase } from 'boot/api'
 import FieldID from './FieldID.vue'
 import FieldText from './FieldText.vue'
 import FieldBoolean from './FieldBoolean.vue'
@@ -64,11 +81,11 @@ export default defineComponent({
     FieldRef,
     FieldJSONB
   },
-  props: ['item', 'definition'],
+  props: ['tableId', 'item', 'definition'],
   emits: ['item-changed', 'close'],
   setup (props, ctx) {
     const $q = useQuasar()
-
+    const logger = inject('logger')('ItemEditor')
     const state = reactive({
       item: null,
       ready: false,
@@ -77,21 +94,21 @@ export default defineComponent({
       changed: false
     })
     const fieldUpdated = (k, val) => {
-      console.log('fieldUpdated', k, val)
+      logger.log(':fieldUpdated', k, val)
       state.item[k] = val
     }
     const itemUpdate = () => {
-      console.log('[ItemEditor] itemUpdate')
+      logger.log(':itemUpdate')
       state.changed = false
     }
     const itemDelete = () => {
-      console.log('[ItemEditor] itemDelete')
+      logger.log(':itemDelete')
     }
 
     watch(
       () => state.item,
       (to, from) => {
-        console.log('[ItemEditor] W state.item')
+        logger.log(':W state.item')
         if (to && from) {
           state.changed = true
           ctx.emit('item-changed')
@@ -100,7 +117,7 @@ export default defineComponent({
       { deep: true })
 
     const tryItemClose = () => {
-      console.log('[ItemEditor] tryItemClose')
+      logger.log(':tryItemClose')
       if (state.changed) {
         // dialog with save changed or discard?
         $q.dialog({
@@ -109,25 +126,46 @@ export default defineComponent({
           cancel: true,
           persistent: true
         }).onOk(() => {
-          console.log('>>>> OK')
+          logger.log('>>>> OK')
           itemUpdate()
           ctx.emit('close')
         }).onCancel(() => {
-          console.log('>>>> Cancel')
+          logger.log('>>>> Cancel')
           ctx.emit('close')
         }).onDismiss(() => {
-          console.log('I am triggered on both OK and Cancel')
+          logger.log('I am triggered on both OK and Cancel')
           ctx.emit('close')
         })
       }
     }
 
+    const handleCreate = async () => {
+      logger.log(':handleCreate start')
+    }
+    const handleUpdate = async () => {
+      logger.log(':handleUpdate start')
+      try {
+        const payload = { color: state.item.color }
+        // const data = supabase
+        //   .from(props.tableId)
+        //   .update(payload)
+        //   .match({ id: item.id })
+        logger.log(':handleUpdate done', data)
+      }
+      catch (e) {
+        logger.log(':handleUpdate e', e)
+      }
+    }
+    const handleDelete = () => {
+      logger.log(':handleDelete start')
+    }
+
     onMounted(() => {
-      console.log('[ItemEditor] onMounted')
+      logger.log(':onMounted')
       state.item = JSON.parse(JSON.stringify(props.item))
     })
     onBeforeUnmount(() => {
-      console.log('[ItemEditor] onBeforeUnmount')
+      logger.log(':onBeforeUnmount')
     })
 
     return {
@@ -135,7 +173,9 @@ export default defineComponent({
       itemUpdate,
       itemDelete,
       tryItemClose,
-      fieldUpdated
+      fieldUpdated,
+      handleUpdate,
+      handleDelete,
     }
   }
 })

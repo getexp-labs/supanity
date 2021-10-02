@@ -21,6 +21,7 @@ q-page.q-pa-md
     ItemEditor(
       v-if="state.item"
       ref="refItemEditor"
+      :tableId="state.tableId"
       :item="state.item"
       :definition="state.definition"
       :style="{minWidth: '550px', maxWidth: '550px'}"

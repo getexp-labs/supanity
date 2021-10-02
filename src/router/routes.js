@@ -1,24 +1,32 @@
 import { useStoreMain } from 'src/stores/main'
-import { fetcher } from 'boot/api'
+import { supabase, fetcher } from 'boot/api'
 
 const needAnon = async (to, from, next) => {
   console.log('[needAnon] start')
-  const storeMain = useStoreMain()
-  if (storeMain.user_id) next('/')
-  else next()
+  const currentUser = supabase.auth.currentUser
+  console.log('[needAnon] currentUser')
+  if (currentUser) {
+    console.log('[needAnon] GOT currentUser')
+    next('/')
+  }
+  else {
+    console.log('[needAnon] NO currentUser')
+    next()
+  }
 }
 
 const needUser = async (to, from, next) => {
   console.log('[needUser] start')
-  const storeMain = useStoreMain()
-  if (storeMain.user_id) {
-    console.log('[needUser] storeMain.user_id FOUND')
-    // const user = await storeMain.userGet(storeMain.user_id)
-    // console.log('[needUser] user', user)
+  const currentUser = supabase.auth.currentUser
+  console.log('[needUser] currentUser')
+  if (currentUser) {
+    const storeMain = useStoreMain()
+    console.log('[needUser] GOT currentUser')
+    await storeMain.userGet(currentUser.id)
     next()
   }
   else {
-    console.log('[needUser] storeMain.user_id NOT FOUND')
+    console.log('[needUser] NO currentUser')
     next('/auth')
   }
 }
@@ -28,6 +36,10 @@ const routes = [
     path: '/auth',
     component: () => import('layouts/AuthLayout.vue'),
     beforeEnter: needAnon
+  },
+  {
+    path: '/test',
+    component: () => import('layouts/TestLayout.vue'),
   },
   {
     path: '/',

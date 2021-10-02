@@ -1,6 +1,7 @@
 import { boot } from 'quasar/wrappers'
 import { useStoreMain } from 'src/stores/main.js'
-// import axios from 'axios'
+import { createClient } from '@supabase/supabase-js'
+import { extend } from 'quasar'
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
@@ -10,18 +11,24 @@ import { useStoreMain } from 'src/stores/main.js'
 // for each client)
 
 // const api = axios.create({ baseURL: 'https://api.example.com' })
+// import { supabase } from 'boot/api'
+
+const SUPABASE_PROJECT_ID = process.env.SUPABASE_PROJECT_ID
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY
+const SUPABASE_CLIENT_URL = `https://${SUPABASE_PROJECT_ID}.supabase.co`
+export const supabase = createClient(SUPABASE_CLIENT_URL, SUPABASE_ANON_KEY)
 
 export default boot(({ app }) => {
-  console.log('[boot] start')
-  const storeMain = useStoreMain()
-  const user_id = localStorage.getItem('user_id')
-  if (user_id) {
-    console.log('[boot] user_id FOUND')
-    storeMain.user_id = user_id
-  }
-  else {
-    console.log('[boot] user_id NOT FOUND')
-  }
+  console.log('[api] start')
+  // const storeMain = useStoreMain()
+  // const user_id = localStorage.getItem('user_id')
+  // if (user_id) {
+  //   console.log('[boot] user_id FOUND')
+  //   storeMain.user_id = user_id
+  // }
+  // else {
+  //   console.log('[boot] user_id NOT FOUND')
+  // }
   // app.get('/api/hello', (req, res) => {
   //   res.json({ hello: 'dick' })
   // })
@@ -40,8 +47,8 @@ export default boot(({ app }) => {
 
 export const fetcher = async (key) => {
   console.log('[fetcher] key', key)
-  const storeMain = useStoreMain()
-  const supabase = storeMain.supabase
+  // const storeMain = useStoreMain()
+  // const supabase = storeMain.supabase
   const response = await fetch(
     `${supabase.supabaseUrl}/rest/v1${key}`,
     {
@@ -56,15 +63,27 @@ export const fetcher = async (key) => {
   return response.json()
 }
 
+export const schemaMeta = reactive({
+  definitions: {
+    offers: {
+      properties: {
+        cover_image: { meta: { type: 'img:one' } },
+        gallery_images: { meta: { type: 'img:many' } }
+      }
+    }
+  }
+})
+
 export const fetcherSchema = async (key) => {
   console.log('[fetcherSchema]', key)
-  const storeMain = useStoreMain()
-  const supabase = storeMain.supabase
   const response = await fetch(
     `${supabase.supabaseUrl}/rest/v1/?apikey=${encodeURIComponent(supabase.supabaseKey)}`,
     {
       method: 'GET'
     }
   )
-  return response.json()
+  const schema = await response.json()
+  const schemaMerged = await extend(true, schema, schemaMeta)
+  console.log('schemaMerged', schemaMerged)
+  return schema
 }

@@ -1,6 +1,6 @@
 {
   "name": "supanity",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "supanity",
   "productName": "supanity",
   "author": "ivanq3w <ivanq3w@gmail.com>",
@@ -9,8 +9,9 @@
     "dev": "npx quasar dev -m spa",
     "build": "npx quasar build -m spa",
     "ext:i": "npm i ../",
-    "ext:add": "npx quasar ext invoke sn-ext",
-    "ext:del": "npx quasar ext uninvoke sn-ext"
+    "ext:add": "npx quasar ext invoke sn",
+    "ext:del": "npx quasar ext uninvoke sn",
+    "serve": "node server.js"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
@@ -26,9 +27,11 @@
     "pinia": "^2.0.0-rc.9",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
+    "quasar-app-extension-sn": "file:..",
     "serve-static": "^1.14.1",
     "shelljs": "^0.8.4",
     "swrv": "^1.0.0-beta.8",
+    "unplugin-auto-import": "^0.4.10",
     "vue-i18n": "^9.0.0-beta.0"
   },
   "devDependencies": {
