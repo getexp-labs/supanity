@@ -19,12 +19,10 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useStoreMain } from 'src/stores/main'
 import { useQuasar } from 'quasar'
 import SupaFilesEditor from './SupaFilesEditor.vue'
 
 const $q = useQuasar()
-const storeMain = useStoreMain()
 
 const props = defineProps({
   title: { type: String },

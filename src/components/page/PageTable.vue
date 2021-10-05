@@ -4,6 +4,9 @@
     &:hover {
       background: #eee;
     }
+    th {
+      text-align: center;
+    }
   }
 }
 </style>
@@ -21,18 +24,22 @@ q-page.q-pa-md
     ItemEditor(
       v-if="state.item"
       ref="refItemEditor"
-      :tableId="state.tableId"
+      :tableId="tableId"
+      :relationUrl="relationUrl"
       :item="state.item"
-      :definition="state.definition"
+      :definition="definition"
       :style="{minWidth: '550px', maxWidth: '550px'}"
       @item-changed="state.itemChanged = true"
       @close="state.item = null")
   //- items
   q-table(
     dense flat
-    :rows="items"
+    v-model:pagination="pagination"
+    :loading="state.isLoading"
+    :rows="state.items"
     :columns="itemsColumns"
     :style="{minHeight: '50vh'}"
+    @request="onRequest"
     @row-click="itemClick")
 </template>
 
@@ -40,8 +47,9 @@ q-page.q-pa-md
 import useSWRV from 'swrv'
 import { defineComponent, ref, computed, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useStoreMain } from 'src/stores/main.js'
+import { rowFormating, isForeignKey, isPrimaryKey } from 'src/helpers/supabase.helper'
 import ItemEditor from 'components/item/ItemEditor.vue'
-import { fetcher } from 'boot/api'
+import { fetcher, supabase } from 'boot/api'
 
 export default defineComponent({
   name: 'PageTable',
@@ -51,78 +59,100 @@ export default defineComponent({
   setup () {
     const refItemEditor = ref(null)
     const storeMain = useStoreMain()
-
+    const logger = inject('logger')('PageTable')
     const { data: schema } = useSWRV('/schema', null)
+    const tableBaseUrl = `/${storeMain.page.id}?select=*`
     const state = reactive({
-      tableId: computed(() => storeMain.page.id),
-      definition: computed(() => schema?.value.definitions[state.tableId]),
       item: null,
-      itemChanged: false
+      itemChanged: false,
+      isLoading: false,
+      items: [],
     })
-
-    const tableUrl = computed(() => {
-      let base = `/${state.tableId}?select=*`
+    const pagination = ref({
+      sortBy: 'desc',
+      descending: false,
+      page: 1,
+      rowsPerPage: 5,
+      rowsNumber: 10
+    })
+    const definition = schema?.value.definitions[storeMain.page.id]
+    const relationUrl = computed(() => {
+      let base = tableBaseUrl
       Object
-        .entries(state.definition.properties)
-        .reduce((acc, [key, val]) => {
-          if (val.type === 'string' && val.format === 'uuid' && key !== 'id') {
+        .entries(definition.properties)
+        .forEach(([key, val]) => {
+          if (isForeignKey(val)) {
             base += `,${key}(*)`
           }
-          return acc
-        }, '')
-      return base
+        })
+      return base === tableBaseUrl ? null : base
     })
-    const { data: items, error: itemsError } = useSWRV(tableUrl.value, fetcher)
+
+    const onRequest = async ({ pagination: { page, rowsPerPage, sortBy, descending } }) => {
+      state.isLoading = true
+      const startRecord = (page - 1) * rowsPerPage
+      const { data } = await supabase.from(storeMain.page.id).select().range(startRecord, startRecord + rowsPerPage - 1)
+      state.items = data
+      pagination.value.page = page
+      pagination.value.rowsPerPage = rowsPerPage
+      pagination.value.sortBy = sortBy
+      pagination.value.descending = descending
+      state.isLoading = false
+    }
 
     const itemsColumns = computed(() => {
-      return Object.entries(state.definition.properties).map(([key, val]) => {
+      return Object.entries(definition.properties).map(([key, val]) => {
         const r = {
           name: key,
           label: key,
           field: key
         }
-        if (key === 'id') {
-          r.style = 'max-width: 60px; overflow: hidden'
-        } else if (val.type === 'string' && val.format === 'jsonb') {
-          r.format = (val, row) => {
-            return JSON.stringify(val)
-          }
+        r.style = 'max-width: 300px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center;'
+        if (isPrimaryKey(val) || isForeignKey(val)) {
+          r.style = 'max-width: 100px; overflow: hidden; text-overflow: ellipsis'
         }
+        r.format = rowFormating(val.format)
         return r
       })
     })
 
     const itemClick = (e, item, itemIndex) => {
-      console.log('[PageTable] itemClick', e, item, itemIndex)
+      logger.log('itemClick', e, item, itemIndex)
       state.item = item
     }
     const itemCreate = () => {
-      console.log('[PageTable] itemCreate')
+      logger.log('itemCreate')
       // go to server, try to create it
       // then update it? cant create without required fields...
     }
     const itemChangedTryClose = () => {
-      console.log('[PageTable] itemChangedTryClose')
+      logger.log('itemChangedTryClose')
       if (refItemEditor.value) {
         refItemEditor.value.tryItemClose()
       }
     }
-    onMounted(() => {
-      console.log('[PageTable] onMounted')
+    onMounted(async () => {
+      logger.log('onMounted')
+      onRequest({ pagination: pagination.value })
+      const { count } = await supabase.from(storeMain.page.id).select('*', { count: 'exact', head: true })
+      pagination.value.rowsNumber = count
     })
     onBeforeUnmount(() => {
-      console.log('[PageTable] onBeforeUnmount')
+      logger.log('onBeforeUnmount')
     })
-
+    logger.log('definition: ', definition)
     return {
       refItemEditor,
-      items,
       itemsColumns,
       state,
+      pagination,
+      definition,
+      tableId: storeMain.page.id,
+      relationUrl,
+      onRequest,
       itemClick,
       itemCreate,
-      itemChangedTryClose,
-      tableUrl
+      itemChangedTryClose
     }
   }
 })

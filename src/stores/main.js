@@ -105,12 +105,11 @@ export const useStoreMain = defineStore('main', {
     },
     async userSignIn () {
       console.log('[userSignIn] start')
-      const redirectTo = `${window.location.origin}`
+      const redirectTo = `${window.location.origin}/auth`
       console.log('[userSignIn] redirectTo', redirectTo)
       const { user, session, error } = await supabase.auth.signIn({
         provider: 'discord'
       }, { redirectTo, scopes: 'identify email guilds.join' })
-      localStorage.setItem('auth_waiting', true)
       console.log('[userSignIn] done')
     },
     async userSignOut () {
@@ -124,7 +123,7 @@ export const useStoreMain = defineStore('main', {
     async userGet (id) {
       console.log('[userGet]', id)
       if (!id) return
-      const { data: [user] } = await supabase.from('users').select().eq('id', id)
+      const user = supabase.auth.user()
       if (user) {
         this.user = user
       }

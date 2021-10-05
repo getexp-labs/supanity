@@ -63,7 +63,9 @@ div(
 <script>
 import { defineComponent, reactive, onMounted, onBeforeUnmount, watch, inject } from 'vue'
 import { useQuasar } from 'quasar'
-import { supabase } from 'boot/api'
+import useSWRV from 'swrv'
+import { fetcher } from 'boot/api'
+import { isPrimaryKey } from 'src/helpers/supabase.helper'
 import FieldID from './FieldID.vue'
 import FieldText from './FieldText.vue'
 import FieldBoolean from './FieldBoolean.vue'
@@ -81,17 +83,35 @@ export default defineComponent({
     FieldRef,
     FieldJSONB
   },
-  props: ['tableId', 'item', 'definition'],
+  props: ['tableId', 'item', 'definition', 'relationUrl'],
   emits: ['item-changed', 'close'],
   setup (props, ctx) {
     const $q = useQuasar()
     const logger = inject('logger')('ItemEditor')
     const state = reactive({
-      item: null,
+      item: props.relationUrl ? null : props.item,
       ready: false,
       updating: false,
       deleting: false,
-      changed: false
+      changed: false,
+      loading: !!props.relationUrl
+    })
+    const fetchingUrl = computed(() => {
+      if (!props.relationUrl) return ''
+      const primaryKeys = []
+      Object.entries(props.definition.properties).forEach(([key, val]) => {
+        if (isPrimaryKey(val)) {
+          primaryKeys.push(key)
+        }
+      })
+      return `${props.relationUrl}&${primaryKeys.map(key => `${key}=eq.${props.item[key]}`).join('&')}`
+    })
+    const { data: itemDetail } = useSWRV(fetchingUrl, props.relationUrl ? fetcher : null)
+    watchEffect(() => {
+      if (itemDetail.value) {
+        logger.log('Detail fetched: ', itemDetail.value)
+        state.item = itemDetail.value[0]
+      }
     })
     const fieldUpdated = (k, val) => {
       logger.log(':fieldUpdated', k, val)
@@ -162,7 +182,6 @@ export default defineComponent({
 
     onMounted(() => {
       logger.log(':onMounted')
-      state.item = JSON.parse(JSON.stringify(props.item))
     })
     onBeforeUnmount(() => {
       logger.log(':onBeforeUnmount')
