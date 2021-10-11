@@ -4,24 +4,20 @@
 <template lang="pug">
 q-checkbox(
   :label="label"
-  :model-value="value"
-  @update:model-value="$emit('update', $event)"
+  :modelValue="modelValue"
+  @update:modelValue="$emit('update:modelValue', $event)"
   ).full-width
 </template>
 
-<script lang="ts">
+<script lang="js">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'FieldBoolean',
-  emits: ['update'],
+  emits: ['update:modelValue'],
   props: {
-    value: { type: Boolean },
+    modelValue: { type: Boolean },
     label: { type: String }
   },
-  setup () {
-    return {
-    }
-  }
 })
 </script>

@@ -4,20 +4,15 @@
 <template lang="pug">
 q-input(
   dense filled hide-bottom-space
-  v-model="value").full-width.text-black
+  :modelValue="modelValue"
+  @update:modelValue="emit('update:modelValue', $event)").full-width.text-black
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup>
 
-export default defineComponent({
-  name: 'FieldNumber',
-  props: {
-    value: { type: [Number, String] }
-  },
-  setup () {
-    return {
-    }
-  }
+const props = defineProps({
+  modelValue: { type: [Number, String] }
 })
+
+const emit = defineEmits(['update:modelValue'])
 </script>

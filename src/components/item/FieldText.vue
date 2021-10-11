@@ -5,22 +5,18 @@
 q-input(
   dense filled hide-bottom-space
   :label="label"
-  v-model="value"
+  :modelValue="modelValue"
+  @update:modelValue="emit('update:modelValue', $event)"
   ).full-width.text-black
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup>
 
-export default defineComponent({
-  name: 'FieldText',
-  props: {
-    value: { type: String },
-    label: { type: String }
-  },
-  setup () {
-    return {
-    }
-  }
+const props = defineProps({
+  modelValue: { type: String },
+  label: { type: String }
 })
+
+const emit = defineEmits(['update:modelValue'])
+
 </script>
