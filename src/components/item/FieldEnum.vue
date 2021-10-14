@@ -2,29 +2,24 @@
 </style>
 
 <template lang="pug">
-q-input(
-  dense filled hide-bottom-space
+q-select(
   :label="label"
-  type="textarea"
+  :options="enum"
   :modelValue="modelValue"
   @update:modelValue="$emit('update:modelValue', $event)"
-  ).full-width.text-black
+  ).full-width
 </template>
 
-<script lang="ts">
+<script lang="js">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'FieldJSONB',
+  name: 'FieldEnum',
   emits: ['update:modelValue'],
   props: {
-    value: { type: [String, Object] },
+    enum: { type: Array },
+    modelValue: { type: String },
     label: { type: String }
   },
-  setup (props) {
-    return {
-      modelValue: JSON.stringify(props.value, undefined, 2)
-    }
-  }
 })
 </script>

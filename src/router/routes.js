@@ -3,7 +3,7 @@ import { supabase, fetcher } from 'boot/api'
 
 const needAnon = async (to, from, next) => {
   console.log('[needAnon] start')
-  const currentUser = supabase.auth.currentUser
+  const currentUser = supabase.auth.user()
   console.log('[needAnon] currentUser')
   if (currentUser) {
     console.log('[needAnon] GOT currentUser')
@@ -17,7 +17,7 @@ const needAnon = async (to, from, next) => {
 
 const needUser = async (to, from, next) => {
   console.log('[needUser] start')
-  const currentUser = supabase.auth.currentUser
+  const currentUser = supabase.auth.user()
   console.log('[needUser] currentUser')
   if (currentUser) {
     const storeMain = useStoreMain()

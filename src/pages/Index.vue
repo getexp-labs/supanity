@@ -3,7 +3,6 @@ q-page.q-pa-md
   //- img(alt="Quasar logo" src="~assets/quasar-logo-vertical.svg" style="width: 200px; height: 200px")
   //- small {{ schema }}
   small.full-width {{ storeMain.user }}
-  small.full-width {{ storeMain.userAuth }}
 </template>
 
 <script>

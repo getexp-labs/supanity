@@ -4,126 +4,101 @@
     &:hover {
       background: #eee;
     }
+    th {
+      text-align: center;
+    }
   }
 }
 </style>
 
 <template lang="pug">
-q-page.q-pa-md
-  q-page-sticky(position="bottom-right" :offset="[18, 18]")
-    q-btn(round color="primary" size="md" icon="add" class="" @click="itemCreate()")
+q-page(padding)
   q-dialog(
+    v-model="showEditor"
     dark side="right" position="right" square full-height
-    :model-value="state.item ? true : false"
-    :persistent="state.itemChanged"
-    @shake="itemChangedTryClose"
-    @hide="state.item = null").window-height
+    :persistent="itemChanged"
+    @shake="tryItemClose"
+  ).window-height
     ItemEditor(
-      v-if="state.item"
-      ref="refItemEditor"
-      :tableId="state.tableId"
-      :item="state.item"
-      :definition="state.definition"
-      :style="{minWidth: '550px', maxWidth: '550px'}"
-      @item-changed="state.itemChanged = true"
-      @close="state.item = null")
+      :tableId="storeMain.page.id"
+      :item="selectedItem"
+      :definition="definition"
+      @item-changed="itemChanged = true"
+      @item-upserted="handleUpsert"
+    )
   //- items
-  q-table(
-    dense flat
-    :rows="items"
-    :columns="itemsColumns"
-    :style="{minHeight: '50vh'}"
-    @row-click="itemClick")
+  ItemTable(
+    ref="tableObj"
+    dense
+    flat
+    :definition="definition"
+    :tableId="storeMain.page.id"
+    @row-click="itemClick"
+  )
+  q-page-sticky(position="bottom-right" :offset="[18, 18]")
+    q-btn(round color="primary" size="md" icon="add" @click="handleAdd")
 </template>
 
-<script >
+<script setup>
 import useSWRV from 'swrv'
-import { defineComponent, ref, computed, reactive, onMounted, onBeforeUnmount } from 'vue'
+import { useQuasar } from 'quasar'
 import { useStoreMain } from 'src/stores/main.js'
 import ItemEditor from 'components/item/ItemEditor.vue'
-import { fetcher } from 'boot/api'
+import ItemTable from 'components/base/ItemTable.vue'
 
-export default defineComponent({
-  name: 'PageTable',
-  components: {
-    ItemEditor
-  },
-  setup () {
-    const refItemEditor = ref(null)
-    const storeMain = useStoreMain()
+const $q = useQuasar()
+const storeMain = useStoreMain()
+const logger = inject('logger')('PageTable')
+const { data: schema } = useSWRV('/schema', null)
+const definition = schema?.value.definitions[storeMain.page.id]
+const showEditor = ref(false)
+const itemChanged = ref(false)
+const selectedItem = ref()
 
-    const { data: schema } = useSWRV('/schema', null)
-    const state = reactive({
-      tableId: computed(() => storeMain.page.id),
-      definition: computed(() => schema?.value.definitions[state.tableId]),
-      item: null,
-      itemChanged: false
-    })
+const itemClick = (_, item) => {
+  selectedItem.value = item
+  showEditor.value = true
+}
 
-    const tableUrl = computed(() => {
-      let base = `/${state.tableId}?select=*`
-      Object
-        .entries(state.definition.properties)
-        .reduce((acc, [key, val]) => {
-          if (val.type === 'string' && val.format === 'uuid' && key !== 'id') {
-            base += `,${key}(*)`
-          }
-          return acc
-        }, '')
-      return base
-    })
-    const { data: items, error: itemsError } = useSWRV(tableUrl.value, fetcher)
+const handleAdd = () => {
+  selectedItem.value = undefined
+  showEditor.value = true
+}
 
-    const itemsColumns = computed(() => {
-      return Object.entries(state.definition.properties).map(([key, val]) => {
-        const r = {
-          name: key,
-          label: key,
-          field: key
-        }
-        if (key === 'id') {
-          r.style = 'max-width: 60px; overflow: hidden'
-        } else if (val.type === 'string' && val.format === 'jsonb') {
-          r.format = (val, row) => {
-            return JSON.stringify(val)
-          }
-        }
-        return r
-      })
-    })
-
-    const itemClick = (e, item, itemIndex) => {
-      console.log('[PageTable] itemClick', e, item, itemIndex)
-      state.item = item
-    }
-    const itemCreate = () => {
-      console.log('[PageTable] itemCreate')
-      // go to server, try to create it
-      // then update it? cant create without required fields...
-    }
-    const itemChangedTryClose = () => {
-      console.log('[PageTable] itemChangedTryClose')
-      if (refItemEditor.value) {
-        refItemEditor.value.tryItemClose()
-      }
-    }
-    onMounted(() => {
-      console.log('[PageTable] onMounted')
-    })
-    onBeforeUnmount(() => {
-      console.log('[PageTable] onBeforeUnmount')
-    })
-
-    return {
-      refItemEditor,
-      items,
-      itemsColumns,
-      state,
-      itemClick,
-      itemCreate,
-      itemChangedTryClose,
-      tableUrl
-    }
-  }
+onBeforeUnmount(() => {
+  logger.log('onBeforeUnmount')
 })
+
+const handleUpsert = (message) => {
+  showEditor.value = false
+  itemChanged.value = false
+  tableObj.value.refresh()
+  $q.notify({ message, type: 'positive', html: true })
+}
+
+const tryItemClose = () => {
+  logger.log(':tryItemClose')
+  if (itemChanged.value) {
+    // dialog with save changed or discard?
+    $q.dialog({
+      title: 'Unsaved changes',
+      message: 'You have made some unsaved, are you sure you want to close the form?',
+      cancel: true,
+      persistent: true
+    }).onOk(() => {
+      logger.log('>>>> OK')
+      showEditor.value = false
+      itemChanged.value = false
+    }).onCancel(() => {
+      logger.log('>>>> Cancel')
+    }).onDismiss(() => {
+      logger.log('I am triggered on both OK and Cancel')
+    })
+  } else {
+    showEditor.value = false
+  }
+}
+
+const tableObj = ref(null)
+
 </script>

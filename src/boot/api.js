@@ -66,10 +66,23 @@ export const fetcher = async (key) => {
 export const schemaMeta = reactive({
   definitions: {
     offers: {
+      meta: { labelColumn: 'title' },
       properties: {
-        cover_image: { meta: { type: 'img:one' } },
-        gallery_images: { meta: { type: 'img:many' } },
-        blocks: { meta: { type: 'blocks' } }
+        cover_image_test: { meta: { type: 'img:one' } },
+        // gallery_images: { meta: { type: 'img:many' } },
+        gallery_images_test: { meta: { type: 'img:many' } },
+      }
+    },
+    game_categories: {
+      meta: { labelColumn: 'name' }
+    },
+    games: {
+      meta: { labelColumn: 'title' }
+    },
+    orders: {
+      properties: {
+        type: { enum: ['C1', 'RETURN'] },
+        status: { enum: ['PAYED', 'REQUESTED', 'ASSIGNED', 'IN_PROGRESS', 'PAUSED', 'DONE'] }
       }
     }
   }
