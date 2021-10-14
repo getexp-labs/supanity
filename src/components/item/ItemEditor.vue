@@ -43,6 +43,12 @@ div(
           :value="state.item[pkey]"
           :definition="p"
           :fieldKey="pkey")
+        FieldBlocks(
+          v-else-if="p.meta && p.meta.type === 'blocks'"
+          :label="pkey"
+          :value="state.item[pkey]"
+          :definition="p"
+          :fieldKey="pkey")
         FieldJSONB(
           v-else-if="p.type === 'string' && p.format === 'jsonb'"
           :label="pkey"
@@ -69,6 +75,7 @@ import FieldText from './FieldText.vue'
 import FieldBoolean from './FieldBoolean.vue'
 import FieldNumber from './FieldNumber.vue'
 import FieldRef from './FieldRef.vue'
+import FieldBlocks from './FieldBlocks.vue'
 import FieldJSONB from './FieldJSONB.vue'
 
 export default defineComponent({
@@ -79,6 +86,7 @@ export default defineComponent({
     FieldBoolean,
     FieldNumber,
     FieldRef,
+    FieldBlocks,
     FieldJSONB
   },
   props: ['tableId', 'item', 'definition'],
