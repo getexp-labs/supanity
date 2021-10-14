@@ -105,7 +105,7 @@ export const useStoreMain = defineStore('main', {
     },
     async userSignIn () {
       console.log('[userSignIn] start')
-      const redirectTo = `${window.location.origin}/auth`
+      const redirectTo = `${window.location.origin}`
       console.log('[userSignIn] redirectTo', redirectTo)
       const { user, session, error } = await supabase.auth.signIn({
         provider: 'discord'
