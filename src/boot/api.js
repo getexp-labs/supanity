@@ -68,9 +68,8 @@ export const schemaMeta = reactive({
     offers: {
       meta: { labelColumn: 'title' },
       properties: {
-        cover_image_test: { meta: { type: 'img:one' } },
-        // gallery_images: { meta: { type: 'img:many' } },
-        gallery_images_test: { meta: { type: 'img:many' } },
+        cover_image: { meta: { type: 'img:one' } },
+        gallery_images: { meta: { type: 'img:many' } },
       }
     },
     game_categories: {
