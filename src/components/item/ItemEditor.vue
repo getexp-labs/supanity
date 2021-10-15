@@ -27,6 +27,7 @@ div(
             :value="state.item[pkey]"
             :definition="p"
             :fieldKey="pkey"
+            :disabled="!canEdit || disabledFields.includes(pkey)"
           )
           FieldImage(
             v-else-if="isImage(p)"
@@ -35,6 +36,7 @@ div(
             height="300px"
             v-model="state.item[pkey]"
             :definition="p"
+            :disabled="!canEdit || disabledFields.includes(pkey)"
           )
           FieldImages(
             v-else-if="isImages(p)"
@@ -42,46 +44,55 @@ div(
             :label="pkey"
             v-model="state.item[pkey]"
             :definition="p"
+            :disabled="!canEdit || disabledFields.includes(pkey)"
           )
           FieldText(
             v-else-if="p.format === FORMATS.TEXT || p.format === FORMATS.VARCHAR"
             :label="pkey"
             v-model="state.item[pkey]"
             :definition="p"
-            :fieldKey="pkey")
+            :fieldKey="pkey"
+            :disabled="!canEdit || disabledFields.includes(pkey)"
+          )
           FieldBoolean(
             v-else-if="p.format === FORMATS.BOOLEAN"
             :label="pkey"
             v-model="state.item[pkey]"
             :definition="p"
             :fieldKey="pkey"
+            :disabled="!canEdit || disabledFields.includes(pkey)"
           )
           FieldNumber(
             v-else-if="p.format === FORMATS.INTEGER"
             :label="pkey"
             v-model="state.item[pkey]"
             :definition="p"
-            :fieldKey="pkey")
+            :fieldKey="pkey"
+            :disabled="!canEdit || disabledFields?.includes(pkey)"
+          )
           FieldRef(
             v-else-if="isForeignKey(p)"
             :label="pkey"
             v-model="state.item[pkey]"
             :definition="p"
-            :fieldKey="pkey")
+            :fieldKey="pkey"
+            :disabled="!canEdit || disabledFields.includes(pkey)"
+          )
           FieldJSONB(
             v-else-if="p.format === FORMATS.JSON"
             :label="pkey"
             :value="state.item[pkey]"
             :definition="p"
-            :fieldKey="pkey")
+            :fieldKey="pkey"
+            :disabled="!canEdit || disabledFields.includes(pkey)"
+          )
     //- actions
-    .row.full-width.q-px-md.q-py-sm
+    div(v-if="props.canEdit").row.full-width.q-px-md.q-py-sm
       q-btn(dense no-caps color="primary" type="submit" :loading="state.submitting").q-px-sm.q-mr-sm {{ item ? 'Update' : 'Create' }}
       q-btn(v-if="item" dense no-caps outline color="red" :loading="state.submitting" @click="handleDelete").q-px-sm Delete
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
 import { supabase } from 'boot/api'
 import { isPrimaryKey, isForeignKey, FORMATS, isImage, isImages, getForeignKeyColumn, deleteFiles, uploadFile, uploadFiles, getPrimaryKeyMapping } from 'src/helpers/supabase.helper'
 import { dataURLtoBlob } from 'src/helpers/file.helper'
@@ -91,7 +102,6 @@ import FieldText from './FieldText.vue'
 import FieldBoolean from './FieldBoolean.vue'
 import FieldNumber from './FieldNumber.vue'
 import FieldRef from './FieldRef.vue'
-import FieldBlocks from './FieldBlocks.vue'
 import FieldJSONB from './FieldJSONB.vue'
 import FieldEnum from './FieldEnum.vue'
 import FieldImages from './FieldImages.vue'
@@ -100,12 +110,15 @@ import FieldImage from './FieldImage.vue'
 const props = defineProps({
   tableId: { type: String, required: true },
   item: { type: Object },
-  definition: { type: Object, required: true }
+  globalDisabledFields: { type: Array, default: () => [] },
+  definition: { type: Object, required: true },
+  canEdit: { type: Boolean, default: true }
 })
+
+const disabledFields = computed(() => props.definition.meta?.disabledFields || props.globalDisabledFields)
 
 const emit = defineEmits(['item-changed', 'item-upserted'])
 
-const $q = useQuasar()
 const logger = inject('logger')('ItemEditor')
 const state = reactive({
   item: {},

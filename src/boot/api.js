@@ -66,6 +66,7 @@ export const fetcher = async (key) => {
 export const schemaMeta = reactive({
   meta: {
     tableHiddenColumns: ['created_at', 'updated_at'],
+    disabledFields: ['created_at', 'updated_at'],
   },
   definitions: {
     offers: {
@@ -78,6 +79,11 @@ export const schemaMeta = reactive({
         gallery_images: { meta: { type: 'img:many' } },
       }
     },
+    order_offers: {
+      meta: {
+        disabled: true
+      },
+    },
     game_categories: {
       meta: { labelColumn: 'name' }
     },
@@ -85,6 +91,9 @@ export const schemaMeta = reactive({
       meta: { labelColumn: 'title' }
     },
     orders: {
+      meta: {
+        disabled: true,
+      },
       properties: {
         type: { enum: ['C1', 'RETURN'] },
         status: { enum: ['PAYED', 'REQUESTED', 'ASSIGNED', 'IN_PROGRESS', 'PAUSED', 'DONE'] }

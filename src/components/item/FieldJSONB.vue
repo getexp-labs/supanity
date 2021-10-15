@@ -6,25 +6,22 @@ q-input(
   dense filled hide-bottom-space
   :label="label"
   type="textarea"
+  :readonly="disabled"
   :modelValue="modelValue"
-  @update:modelValue="$emit('update:modelValue', $event)"
+  @update:modelValue="emit('update:modelValue', $event)"
   ).full-width.text-black
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup>
 
-export default defineComponent({
-  name: 'FieldJSONB',
-  emits: ['update:modelValue'],
-  props: {
-    value: { type: [String, Object] },
-    label: { type: String }
-  },
-  setup (props) {
-    return {
-      modelValue: JSON.stringify(props.value, undefined, 2)
-    }
-  }
+const props = defineProps({
+  value: { type: [String, Object] },
+  disabled: { type: Boolean },
+  label: { type: String }
 })
+
+const emit = defineEmits(['update:modelValue'])
+
+const modelValue = computed(() => JSON.stringify(props.value, undefined, 2))
+
 </script>

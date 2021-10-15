@@ -24,11 +24,13 @@
   //- images previews
   q-input(style="display: none;" ref="addFilePicker" type="file" @update:modelValue="saveFile" accept="image/*")
   q-img(v-if="modelValue" :src="modelValue" :alt="label" :height="height" fit="contain" loading="eager")
-    .absolute-top.q-pa-sm.full-width.text-center.img-toolbar
+    div(v-if="!disabled").absolute-top.q-pa-sm.full-width.text-center.img-toolbar
       q-btn(round color="black" icon="edit" padding="xs" @click="handleAddClick").q-mr-sm
       q-btn(v-if="!required" round color="black" text-color="red" icon="delete" padding="xs" @click="handleDelete")
-  div(v-else).text-center.full-width
+  div(v-else-if="!disabled").text-center.full-width
     q-btn(round color="black" icon="add" padding="xs" @click="handleAddClick")
+  div(v-else)
+    pre Value is empty and can not be updated
 </template>
 
 <script setup>
@@ -41,6 +43,7 @@ const props = defineProps({
   modelValue: { type: String },
   height: { type: String },
   required: { type: Boolean },
+  disabled: { type: Boolean },
   multiple: { type: Boolean }
 })
 

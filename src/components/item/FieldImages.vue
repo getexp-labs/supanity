@@ -22,12 +22,14 @@
   q-input(style="display: none;" ref="editFilePicker" type="file" @update:modelValue="replaceFile")
   q-carousel(v-if="modelValue && modelValue.length" animated v-model="slide" arrows navigation :height="height").full-width
     q-carousel-slide(v-for="(image, index) in modelValue" :key="image" :name="index" :img-src="image")
-      .row.absolute-top.text-center.q-pa-sm.img-toolbar
+      div(v-if="!disabled").row.absolute-top.text-center.q-pa-sm.img-toolbar
         q-btn(round color="black" icon="add" padding="xs" @click="handleAddClick(index)").q-mr-sm
         q-btn(round color="black" icon="edit" padding="xs" @click="handleEditClick(index)").q-mr-sm
         q-btn(round color="black" text-color="red" icon="delete" padding="xs" @click="handleDelete(index)")
-  div(v-else).text-center.full-width
+  div(v-else-if="!disabled").text-center.full-width
     q-btn(round color="black" icon="add" padding="xs" @click="handleAddClick")
+  div(v-else)
+    pre Value is empty and can not be updated
 </template>
 
 <script setup>
@@ -36,7 +38,8 @@ const props = defineProps({
   label: { type: String },
   height: { type: String },
   modelValue: { type: Array },
-  multiple: { type: Boolean }
+  multiple: { type: Boolean },
+  disabled: { type: Boolean }
 })
 const logger = inject('logger')('FieldImages')
 const emit = defineEmits(['update:modelValue'])

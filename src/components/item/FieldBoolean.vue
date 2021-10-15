@@ -3,21 +3,21 @@
 
 <template lang="pug">
 q-checkbox(
-  :label="label"
-  :modelValue="modelValue"
-  @update:modelValue="$emit('update:modelValue', $event)"
+  :label="props.label"
+  :modelValue="props.modelValue"
+  :disable="props.disabled"
+  @update:modelValue="emit('update:modelValue', $event)"
   ).full-width
 </template>
 
-<script lang="js">
-import { defineComponent } from 'vue'
+<script setup>
 
-export default defineComponent({
-  name: 'FieldBoolean',
-  emits: ['update:modelValue'],
-  props: {
-    modelValue: { type: Boolean },
-    label: { type: String }
-  },
+const props = defineProps({
+  modelValue: { type: Boolean },
+  disabled: { type: Boolean },
+  label: { type: String },
 })
+
+const emit = defineEmits(['update:modelValue'])
+
 </script>

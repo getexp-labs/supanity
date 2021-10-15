@@ -3,20 +3,13 @@
 
 <template lang="pug">
 div(:style=`{borderRadius: '4px'}`).row.full-width.bg-grey-3.q-pa-sm.cursor-pointer
-  small {{ value }}
+  small {{ props.value }}
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup>
 
-export default defineComponent({
-  name: 'FieldId',
-  props: {
-    value: { type: String }
-  },
-  setup () {
-    return {
-    }
-  }
+const props = defineProps({
+  value: { type: String }
 })
+
 </script>

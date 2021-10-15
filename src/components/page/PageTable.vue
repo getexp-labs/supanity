@@ -23,6 +23,8 @@ q-page(padding)
       :tableId="storeMain.page.id"
       :item="selectedItem"
       :definition="definition"
+      :globalDisabledFields="schema?.meta?.disabledFields"
+      :canEdit="!definition.meta?.disabled"
       @item-changed="itemChanged = true"
       @item-upserted="handleUpsert"
     )
@@ -36,7 +38,7 @@ q-page(padding)
     :tableId="storeMain.page.id"
     @row-click="itemClick"
   )
-  q-page-sticky(position="bottom-right" :offset="[18, 18]")
+  q-page-sticky(v-if="!definition.meta?.disabled" position="bottom-right" :offset="[18, 18]")
     q-btn(round color="primary" size="md" icon="add" @click="handleAdd")
 </template>
 

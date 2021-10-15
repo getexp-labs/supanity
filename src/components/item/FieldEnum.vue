@@ -3,23 +3,23 @@
 
 <template lang="pug">
 q-select(
-  :label="label"
-  :options="enum"
-  :modelValue="modelValue"
-  @update:modelValue="$emit('update:modelValue', $event)"
+  :label="props.label"
+  :options="props.enum"
+  :readonly="props.disabled"
+  :modelValue="props.modelValue"
+  @update:modelValue="emit('update:modelValue', $event)"
   ).full-width
 </template>
 
-<script lang="js">
-import { defineComponent } from 'vue'
+<script setup>
 
-export default defineComponent({
-  name: 'FieldEnum',
-  emits: ['update:modelValue'],
-  props: {
-    enum: { type: Array },
-    modelValue: { type: String },
-    label: { type: String }
-  },
+const props = defineProps({
+  enum: { type: Array },
+  modelValue: { type: String },
+  disabled: { type: Boolean },
+  label: { type: String }
 })
+
+const emit = defineEmits(['update:modelValue'])
+
 </script>

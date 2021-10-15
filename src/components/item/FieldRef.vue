@@ -1,9 +1,4 @@
 <style lang="scss" scoped>
-pre {
-  font-size: 12px;
-  padding: 8px;
-  margin: 0;
-}
 </style>
 
 <template lang="pug">
@@ -23,10 +18,12 @@ div(v-if="modelValue").row.full-width.bg-grey-2
         div(v-for="(propertyDefinition,property) in foreignProperties")
           strong {{property}}
           span : {{rowFormating(propertyDefinition.format)(modelValue[property])}}
-  q-btn(flat color="black" icon="edit" @click="handleUpsertClick").q-float-right
-  q-btn(v-if="!required" flat color="black" text-color="red" icon="delete" @click="handleDelete").q-float-right
-div(v-else).text-center.full-width
+  q-btn(v-if="!disabled" flat color="black" icon="edit" @click="handleUpsertClick").q-float-right
+  q-btn(v-if="!required && !disabled" flat color="black" text-color="red" icon="delete" @click="handleDelete").q-float-right
+div(v-else-if="!disabled").text-center.full-width
     q-btn(round color="black" icon="add" padding="xs" @click="handleUpsertClick")
+div(v-else)
+  pre Value is empty and can not be updated
 </template>
 
 <script setup>
@@ -40,6 +37,7 @@ const props = defineProps({
   modelValue: { type: [Object, String, null] },
   label: { type: String },
   required: { type: Boolean, default: false },
+  disabled: { type: Boolean },
   definition: { type: Object, required: true },
   fieldKey: { type: String, required: true },
 })
