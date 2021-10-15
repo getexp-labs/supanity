@@ -64,9 +64,15 @@ export const fetcher = async (key) => {
 }
 
 export const schemaMeta = reactive({
+  meta: {
+    tableHiddenColumns: ['created_at', 'updated_at'],
+  },
   definitions: {
     offers: {
-      meta: { labelColumn: 'title' },
+      meta: {
+        labelColumn: 'title',
+        tableHiddenColumns: ['created_at', 'updated_at', 'cover_image', 'gallery_images', 'game_id'],
+      },
       properties: {
         cover_image: { meta: { type: 'img:one' } },
         gallery_images: { meta: { type: 'img:many' } },

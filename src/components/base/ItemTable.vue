@@ -7,7 +7,7 @@ q-table(
   v-model:pagination="pagination"
   :loading="state.isLoading"
   :rows="state.items"
-  :columns="itemsColumns"
+  :columns="itemColumns"
   :style="{ minHeight: '50vh' }"
   @request="onRequest"
   @row-click="itemClick"
@@ -20,6 +20,7 @@ import { rowFormating, isForeignKey, isPrimaryKey } from 'src/helpers/supabase.h
 
 const props = defineProps({
   rowActions: { type: Array },
+  hiddenColumns: { type: Array, default: () => [] },
   tableId: { type: String, required: true },
   definition: { type: Object, required: true },
 })
@@ -58,20 +59,26 @@ const onRequest = async ({ pagination: { page, rowsPerPage, sortBy, descending }
   state.isLoading = false
 }
 
-const itemsColumns = computed(() => {
-  return Object.entries(props.definition.properties).map(([key, val]) => {
-    const columnDefinition = {
-      name: key,
-      label: key,
-      field: key
-    }
-    columnDefinition.style = 'max-width: 300px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center;'
-    if (isPrimaryKey(val) || isForeignKey(val)) {
-      columnDefinition.style = 'max-width: 100px; overflow: hidden; text-overflow: ellipsis'
-    }
-    columnDefinition.format = rowFormating(val.format)
-    return columnDefinition
-  })
+const itemColumns = computed(() => {
+  const hiddenColumns = props.definition.meta?.tableHiddenColumns
+    ? props.definition.meta.tableHiddenColumns
+    : props.hiddenColumns
+  return Object
+    .entries(props.definition.properties)
+    .filter(([key]) => !hiddenColumns.includes(key))
+    .map(([key, val]) => {
+      const columnDefinition = {
+        name: key,
+        label: key,
+        field: key
+      }
+      columnDefinition.style = 'max-width: 300px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center;'
+      if (isPrimaryKey(val) || isForeignKey(val)) {
+        columnDefinition.style = 'max-width: 100px; overflow: hidden; text-overflow: ellipsis'
+      }
+      columnDefinition.format = rowFormating(val.format)
+      return columnDefinition
+    })
 })
 
 const refresh = () => onRequest({ pagination: pagination.value })

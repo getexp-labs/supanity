@@ -32,6 +32,7 @@ q-page(padding)
     dense
     flat
     :definition="definition"
+    :hiddenColumns="schema?.meta?.tableHiddenColumns"
     :tableId="storeMain.page.id"
     @row-click="itemClick"
   )
