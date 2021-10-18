@@ -23,8 +23,10 @@ div(
           FieldEnum(
             v-else-if="p.enum"
             :enum="p.enum"
+            :multiple="p.format === FORMATS.ARRAY"
             :label="pkey"
-            :value="state.item[pkey]"
+            v-model="state.item[pkey]"
+            :required="definition.required?.includes(pkey)"
             :definition="p"
             :fieldKey="pkey"
             :disabled="!canEdit || disabledFields.includes(pkey)"
@@ -32,7 +34,7 @@ div(
           FieldImage(
             v-else-if="isImage(p)"
             :label="pkey"
-            :required="definition.required && definition.required.includes(pkey)"
+            :required="definition.required?.includes(pkey)"
             height="300px"
             v-model="state.item[pkey]"
             :definition="p"

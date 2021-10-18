@@ -88,7 +88,10 @@ export const schemaMeta = reactive({
       meta: { labelColumn: 'name' }
     },
     games: {
-      meta: { labelColumn: 'title' }
+      meta: { labelColumn: 'title' },
+      properties: {
+        platforms: { enum: ['PC', 'PS', 'XBOX'] },
+      }
     },
     orders: {
       meta: {
