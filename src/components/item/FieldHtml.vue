@@ -40,8 +40,7 @@ const emit = defineEmits(['update:modelValue'])
 const editor = useEditor({
   content: props.modelValue,
   extensions: [
-    StarterKit.configure(),
-    Strike
+    StarterKit
   ],
   onUpdate: () => {
     emit('update:modelValue', unref(editor).getHTML())
