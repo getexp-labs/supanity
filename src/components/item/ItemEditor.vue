@@ -116,7 +116,7 @@ import FieldJSONB from './FieldJSONB.vue'
 import FieldEnum from './FieldEnum.vue'
 import FieldImages from './FieldImages.vue'
 import FieldImage from './FieldImage.vue'
-import FieldHtml from './FieldHtml.vue'
+import FieldHtml from './field-html/FieldHtml.vue'
 
 const props = defineProps({
   tableId: { type: String, required: true },
