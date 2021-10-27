@@ -40,6 +40,7 @@ export const getForeignKeyTable = (columnProperties) => columnProperties.descrip
 
 export const isImage = (columnProperties) => columnProperties.meta?.type === 'img:one'
 export const isImages = (columnProperties) => columnProperties.meta?.type === 'img:many'
+export const isHtml = (columnProperties) => columnProperties.meta?.type === 'html'
 
 export const rowFormating = (type) => (value, _) => {
   switch (type) {

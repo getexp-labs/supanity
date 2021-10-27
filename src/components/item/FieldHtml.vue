@@ -1,6 +1,6 @@
 <style lang="scss">
 .ProseMirror {
-  min-height: 400px;
+  min-height: 200px;
   width: 100%;
   padding: 8px;
 }
@@ -17,7 +17,7 @@ div(
   ).row.full-width
   EditorContent(
     :editor="editor"
-    :style="{minHeight: '400px'}").full-width
+    :style="{minHeight: '200px', maxHeight: '300px'}").full-width
 </template>
 
 <script setup>
@@ -25,16 +25,33 @@ import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 
 const logger = inject('logger')('FieldBlocks')
+
 const props = defineProps({
   fieldKey: { type: String },
-  value: { type: [Object] },
+  modelValue: { type: [String], default: '' },
+  disabled: { type: Boolean },
+  required: { type: Boolean, default: false },
+  definition: { type: Object, required: true },
+  label: { type: String }
 })
 
+const emit = defineEmits(['update:modelValue'])
+
 const editor = useEditor({
-  content: '<p>I’m running tiptap with Vue.js. 🎉</p>',
+  content: props.modelValue,
   extensions: [
-    StarterKit,
+    StarterKit.configure(),
+    Strike
   ],
+  onUpdate: () => {
+    emit('update:modelValue', unref(editor).getHTML())
+  },
+})
+
+watch(() => props.modelValue, (currentVal) => {
+  const isSame = unref(editor).getHTML() === currentVal
+  if (isSame) return
+  unref(editor).commands.setContent(currentVal, false)
 })
 
 onMounted(() => {

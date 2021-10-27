@@ -77,6 +77,7 @@ export const schemaMeta = reactive({
       properties: {
         cover_image: { meta: { type: 'img:one' } },
         gallery_images: { meta: { type: 'img:many' } },
+        description: { meta: { type: 'html' } },
       }
     },
     order_offers: {

@@ -48,6 +48,14 @@ div(
             :definition="p"
             :disabled="!canEdit || disabledFields.includes(pkey)"
           )
+          FieldHtml(
+            v-else-if="isHtml(p)"
+            :label="pkey"
+            v-model="state.item[pkey]"
+            :definition="p"
+            :fieldKey="pkey"
+            :disabled="!canEdit || disabledFields.includes(pkey)"
+          )
           FieldText(
             v-else-if="p.format === FORMATS.TEXT || p.format === FORMATS.VARCHAR"
             :label="pkey"
@@ -96,7 +104,7 @@ div(
 
 <script setup>
 import { supabase } from 'boot/api'
-import { isPrimaryKey, isForeignKey, FORMATS, isImage, isImages, getForeignKeyColumn, deleteFiles, uploadFile, uploadFiles, getPrimaryKeyMapping } from 'src/helpers/supabase.helper'
+import { isPrimaryKey, isForeignKey, FORMATS, isImage, isImages, isHtml, getForeignKeyColumn, deleteFiles, uploadFile, uploadFiles, getPrimaryKeyMapping } from 'src/helpers/supabase.helper'
 import { dataURLtoBlob } from 'src/helpers/file.helper'
 import { areArraysEqual, diffArray } from 'src/helpers/array.helper'
 import FieldID from './FieldID.vue'
@@ -108,6 +116,7 @@ import FieldJSONB from './FieldJSONB.vue'
 import FieldEnum from './FieldEnum.vue'
 import FieldImages from './FieldImages.vue'
 import FieldImage from './FieldImage.vue'
+import FieldHtml from './FieldHtml.vue'
 
 const props = defineProps({
   tableId: { type: String, required: true },
