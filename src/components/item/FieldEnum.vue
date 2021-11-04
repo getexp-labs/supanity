@@ -3,7 +3,7 @@
 
 <template lang="pug">
 q-select(
-  options-selected-class="bg-grey-3"
+  filled dense options-selected-class="bg-grey-3"
   :label="props.label"
   :options="props.enum"
   :readonly="props.disabled"

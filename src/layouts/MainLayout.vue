@@ -11,7 +11,7 @@ q-layout(view="lHh Lpr lFf")
     v-model="state.leftDrawerOpened" show-if-above bordered
     :width="220"
     ).bg-grey-1
-    Drawer
+    BaseDrawer
   q-page-container
     router-view
 </template>
@@ -22,12 +22,12 @@ import { fetcherSchema } from 'boot/api'
 import useSWRV from 'swrv'
 import { useStoreMain } from 'src/stores/main.js'
 
-import Drawer from 'components/Drawer.vue'
+import BaseDrawer from 'components/base/BaseDrawer.vue'
 
 export default defineComponent({
   name: 'MainLayout',
   components: {
-    Drawer
+    BaseDrawer
   },
   setup () {
     const storeMain = useStoreMain()

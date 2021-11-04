@@ -60,6 +60,7 @@ const state = reactive({
   selectedItems: initialItems
 })
 
+// eslint-disable-next-line
 defineEmits(['update:modelValue', ...useDialogPluginComponent.emits])
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()

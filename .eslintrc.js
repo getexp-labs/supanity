@@ -80,6 +80,7 @@ module.exports = {
     'no-undef': 'off',
     'camelcase': 'off',
     'brace-style': 'off',
-    'comma-dangle': 'off'
+    'comma-dangle': 'off',
+    'vue/multi-word-component-names': 'off'
   }
 }

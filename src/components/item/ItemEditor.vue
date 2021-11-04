@@ -10,6 +10,7 @@ div(
       span(v-if="item && definition.meta && definition.meta.labelColumn" style="font-size: 18px").text-bold.text-white {{ state.item[definition.meta.labelColumn] }}
     q-banner(v-if="state.error").text-white.bg-red.text-center {{ state.error }}
     .col.full-width.scroll
+      //- Default item editor with auto generated form from definition
       div.row.full-width.items-start.content-start.q-px-md.q-pt-md.q-mb-md
         div(
           v-for="(p,pkey) in definition.properties" :key="pkey"
@@ -19,7 +20,8 @@ div(
             :label="pkey"
             :value="state.item[pkey]"
             :definition="p"
-            :fieldKey="pkey")
+            :fieldKey="pkey"
+            )
           FieldEnum(
             v-else-if="p.enum"
             :enum="p.enum"
@@ -30,7 +32,7 @@ div(
             :definition="p"
             :fieldKey="pkey"
             :disabled="!canEdit || disabledFields.includes(pkey)"
-          )
+            )
           FieldImage(
             v-else-if="isImage(p)"
             :label="pkey"
@@ -39,7 +41,7 @@ div(
             v-model="state.item[pkey]"
             :definition="p"
             :disabled="!canEdit || disabledFields.includes(pkey)"
-          )
+            )
           FieldImages(
             v-else-if="isImages(p)"
             height="300px"
@@ -47,7 +49,7 @@ div(
             v-model="state.item[pkey]"
             :definition="p"
             :disabled="!canEdit || disabledFields.includes(pkey)"
-          )
+            )
           FieldHtml(
             v-else-if="isHtml(p)"
             :label="pkey"
@@ -55,7 +57,7 @@ div(
             :definition="p"
             :fieldKey="pkey"
             :disabled="!canEdit || disabledFields.includes(pkey)"
-          )
+            )
           FieldText(
             v-else-if="p.format === FORMATS.TEXT || p.format === FORMATS.VARCHAR"
             :label="pkey"
@@ -63,7 +65,7 @@ div(
             :definition="p"
             :fieldKey="pkey"
             :disabled="!canEdit || disabledFields.includes(pkey)"
-          )
+            )
           FieldBoolean(
             v-else-if="p.format === FORMATS.BOOLEAN"
             :label="pkey"
@@ -71,7 +73,7 @@ div(
             :definition="p"
             :fieldKey="pkey"
             :disabled="!canEdit || disabledFields.includes(pkey)"
-          )
+            )
           FieldNumber(
             v-else-if="p.format === FORMATS.INTEGER"
             :label="pkey"
@@ -79,7 +81,7 @@ div(
             :definition="p"
             :fieldKey="pkey"
             :disabled="!canEdit || disabledFields?.includes(pkey)"
-          )
+            )
           FieldRef(
             v-else-if="isForeignKey(p)"
             :label="pkey"
@@ -87,7 +89,7 @@ div(
             :definition="p"
             :fieldKey="pkey"
             :disabled="!canEdit || disabledFields.includes(pkey)"
-          )
+            )
           FieldJSONB(
             v-else-if="p.format === FORMATS.JSON"
             :label="pkey"
@@ -95,7 +97,13 @@ div(
             :definition="p"
             :fieldKey="pkey"
             :disabled="!canEdit || disabledFields.includes(pkey)"
-          )
+            )
+          FieldUnknown(
+            v-else
+            :label="pkey"
+            :value="state.item[pkey]"
+            :fieldKey="pkey"
+            )
     //- actions
     div(v-if="props.canEdit").row.full-width.q-px-md.q-py-sm
       q-btn(dense no-caps color="primary" type="submit" :loading="state.submitting").q-px-sm.q-mr-sm {{ item ? 'Update' : 'Create' }}
@@ -107,6 +115,7 @@ import { supabase } from 'boot/api'
 import { isPrimaryKey, isForeignKey, FORMATS, isImage, isImages, isHtml, getForeignKeyColumn, deleteFiles, uploadFile, uploadFiles, getPrimaryKeyMapping } from 'src/helpers/supabase.helper'
 import { dataURLtoBlob } from 'src/helpers/file.helper'
 import { areArraysEqual, diffArray } from 'src/helpers/array.helper'
+
 import FieldID from './FieldID.vue'
 import FieldText from './FieldText.vue'
 import FieldBoolean from './FieldBoolean.vue'
@@ -117,6 +126,7 @@ import FieldEnum from './FieldEnum.vue'
 import FieldImages from './FieldImages.vue'
 import FieldImage from './FieldImage.vue'
 import FieldHtml from './field-html/FieldHtml.vue'
+import FieldUnknown from './FieldUnknown.vue'
 
 const props = defineProps({
   tableId: { type: String, required: true },
@@ -160,6 +170,7 @@ const handleSubmit = async () => {
   await (props.item ? handleUpdate() : handleCreate())
   state.submitting = false
 }
+
 const handleCreate = async () => {
   logger.log(':handleCreate start')
   try {
@@ -276,6 +287,7 @@ const handleUpdate = async () => {
     state.error = e.toString()
   }
 }
+
 const handleDelete = async () => {
   state.error = undefined
   state.submitting = true
@@ -300,6 +312,7 @@ const handleDelete = async () => {
 }
 
 onMounted(async () => {
+  logger.log(':onMounted')
   if (!props.item) return
   let selectQuery = '*'
   Object
@@ -318,8 +331,8 @@ onMounted(async () => {
     state.item = JSON.parse(JSON.stringify(props.item))
   }
   state.loading = false
-  logger.log(':onMounted')
 })
+
 onBeforeUnmount(() => {
   logger.log(':onBeforeUnmount')
 })

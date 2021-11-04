@@ -12,13 +12,11 @@ q-input(
 </template>
 
 <script setup>
-
+const emit = defineEmits(['update:modelValue'])
 const props = defineProps({
   modelValue: { type: String },
   disabled: { type: Boolean },
   label: { type: String }
 })
-
-const emit = defineEmits(['update:modelValue'])
 
 </script>

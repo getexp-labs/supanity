@@ -1,29 +1,52 @@
-<style lang="scss" scoped>
+<style lang="scss">
+.q-item__section--side {
+  // display: none;
+  max-width: 40px !important;
+  // padding-right: -16px !important;
+}
 </style>
 
 <template lang="pug">
-.row.full-width
-  span {{label}}
-div(v-if="modelValue").row.full-width.bg-grey-2
-  q-expansion-item(
-    expand-icon-toggle
-    v-model="expanded"
-    dense-toggle
-    icon="link"
-    style="border-radius: 10px; flex: 1;"
-    :label="labelValue"
-  )
-    q-card(style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;").bg-grey-2
-      q-card-section
-        div(v-for="(propertyDefinition,property) in foreignProperties")
-          strong {{property}}
-          span : {{rowFormating(propertyDefinition.format)(modelValue[property])}}
-  q-btn(v-if="!disabled" flat color="black" icon="edit" @click="handleUpsertClick").q-float-right
-  q-btn(v-if="!required && !disabled" flat color="black" text-color="red" icon="delete" @click="handleDelete").q-float-right
-div(v-else-if="!disabled").text-center.full-width
-    q-btn(round color="black" icon="add" padding="xs" @click="handleUpsertClick")
-div(v-else)
-  pre Value is empty and can not be updated
+div(:style="{borderRadius: '4px 4px 0px 0px'}").row.full-width.items-start.content-start.bg-grey-3
+  //- title
+  .row.full-width.q-px-sm.q-py-xs
+    small(style="line-height: 1;").text-grey-7 {{label}}
+  div(v-if="modelValue").row.full-width.items-start.content-start
+    .col
+      q-expansion-item(
+        v-model="expanded"
+        dense-toggle
+        icon="link"
+        filled
+        expand-icon="keyboard_arrow_down"
+        style=""
+        :label="labelValue"
+        :style="{maxWidth: '100%'}"
+        ).full-width
+        template(v-slot:header)
+          .row.full-width.q-py-sm
+            q-icon(name="link" size="sm").q-mr-md
+            span.text-bold {{labelValue}}
+        //- Card of the opened item
+        div(style="max-width: 100%; overflow: scroll; max-height: 300px;").row.full-width.q-pa-sm
+          div(v-for="(propertyDefinition,property) in foreignProperties").row.full-width
+            strong.full-width {{property}}
+            small(style="") {{rowFormating(propertyDefinition.format)(modelValue[property])}}
+    //- Actions
+    .row.q-pa-sm
+      q-btn(v-if="!disabled" round flat dense color="black" icon="edit" @click="handleUpsertClick").q-float-right
+      q-btn(v-if="!required && !disabled" round flat dense color="black" text-color="red" icon="delete" @click="handleDelete").q-float-right
+  //- empty and can be update
+  div(
+    v-else-if="!disabled"
+    ).row.full-width.full-width.q-pa-sm
+      q-btn(flat dense no-caps color="black" icon="add" @click="handleUpsertClick").q-ml-xs
+        span.q-ml-md.text-bold Add connection
+  //- empty and disabled
+  div(
+    v-else
+    ).row.full-width.q-pa-sm
+    pre Value is empty and can not be updated
 </template>
 
 <script setup>

@@ -8,13 +8,26 @@ q-table(
   :loading="state.isLoading"
   :rows="state.items"
   :columns="itemColumns"
-  :style="{ minHeight: '50vh' }"
+  :filter="state.filterString"
+  :style=`{
+    minHeight: '80vh'
+  }`
   @request="onRequest"
   @row-click="itemClick"
-)
+  )
+  template(v-slot:top-right)
+    .row
+      q-input(
+        v-model="state.filterString"
+        borderless dense
+        debounce="300"
+        placeholder="Search")
+        template(v-slot:append)
+          q-icon(name="search")
 </template>
 
 <script setup>
+// TODO add sticky header and footer and take all the height
 import { supabase } from 'boot/api'
 import { rowFormating, isForeignKey, isPrimaryKey } from 'src/helpers/supabase.helper'
 
@@ -32,6 +45,7 @@ const logger = inject('logger')('ItemTable')
 const state = reactive({
   isLoading: false,
   items: [],
+  filterString: '',
 })
 
 const pagination = ref({
@@ -70,9 +84,10 @@ const itemColumns = computed(() => {
       const columnDefinition = {
         name: key,
         label: key,
-        field: key
+        field: key,
+        align: 'left',
       }
-      columnDefinition.style = 'max-width: 300px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center;'
+      columnDefinition.style = 'max-width: 300px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;'
       if (isPrimaryKey(val) || isForeignKey(val)) {
         columnDefinition.style = 'max-width: 100px; overflow: hidden; text-overflow: ellipsis'
       }

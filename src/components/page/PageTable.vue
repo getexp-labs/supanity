@@ -13,12 +13,13 @@
 
 <template lang="pug">
 q-page(padding)
+  //- Dialog with item editor
   q-dialog(
     v-model="showEditor"
     dark side="right" position="right" square full-height
     :persistent="itemChanged"
     @shake="tryItemClose"
-  ).window-height
+    ).window-height
     ItemEditor(
       :tableId="storeMain.page.id"
       :item="selectedItem"
@@ -27,9 +28,10 @@ q-page(padding)
       :canEdit="!definition.meta?.disabled"
       @item-changed="itemChanged = true"
       @item-upserted="handleUpsert"
-    )
-  //- items
-  ItemTable(
+      )
+  //- TODO
+  //- Item Table
+  ItemsTable(
     ref="tableObj"
     dense
     flat
@@ -37,7 +39,8 @@ q-page(padding)
     :hiddenColumns="schema?.meta?.tableHiddenColumns"
     :tableId="storeMain.page.id"
     @row-click="itemClick"
-  )
+    )
+  //- Action Add Button
   q-page-sticky(v-if="!definition.meta?.disabled" position="bottom-right" :offset="[18, 18]")
     q-btn(round color="primary" size="md" icon="add" @click="handleAdd")
 </template>
@@ -47,7 +50,7 @@ import useSWRV from 'swrv'
 import { useQuasar } from 'quasar'
 import { useStoreMain } from 'src/stores/main.js'
 import ItemEditor from 'components/item/ItemEditor.vue'
-import ItemTable from 'components/base/ItemTable.vue'
+import ItemsTable from 'components/base/ItemsTable.vue'
 
 const $q = useQuasar()
 const storeMain = useStoreMain()

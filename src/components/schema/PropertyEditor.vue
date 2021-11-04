@@ -11,11 +11,11 @@
       div(v-html="property.description").row.full-width
       pre(style="font-size: 12px; line-height: 0.8; border-radius: 4px;").full-width.bg-grey-3.q-pa-sm {{property}}
       span(
-        v-if="propetryMeta"
+        v-if="property.meta"
         ) Property meta
       pre(
-        v-if="propetryMeta"
-        style="font-size: 12px; line-height: 0.8; border-radius: 4px;").full-width.bg-grey-3.q-pa-sm {{propetryMeta}}
+        v-if="property.meta"
+        style="font-size: 12px; line-height: 0.8; border-radius: 4px;").full-width.bg-grey-3.q-pa-sm {{property.meta}}
       .row.full-width.q-py-sm
         q-btn(icon="add" outline no-caps color="primary").full-width Add meta
   .row.full-width

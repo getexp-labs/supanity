@@ -40,7 +40,7 @@ import { defineComponent, computed } from 'vue'
 import { useStoreMain } from 'src/stores/main.js'
 
 export default defineComponent({
-  name: 'Drawer',
+  name: 'BaseDrawer',
   setup () {
     const storeMain = useStoreMain()
     return {
