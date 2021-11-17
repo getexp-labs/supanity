@@ -12,7 +12,7 @@
 </style>
 
 <template lang="pug">
-q-page(padding)
+q-page()
   //- Dialog with item editor
   q-dialog(
     v-model="showEditor"
@@ -38,10 +38,11 @@ q-page(padding)
     :definition="definition"
     :hiddenColumns="schema?.meta?.tableHiddenColumns"
     :tableId="storeMain.page.id"
+    :style="{height: 'calc(100vh - 50px)'}"
     @row-click="itemClick"
     )
   //- Action Add Button
-  q-page-sticky(v-if="!definition.meta?.disabled" position="bottom-right" :offset="[18, 18]")
+  q-page-sticky(v-if="!definition.meta?.disabled" position="bottom-right" :offset="[32, 64]")
     q-btn(round color="primary" size="md" icon="add" @click="handleAdd")
 </template>
 

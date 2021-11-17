@@ -3,25 +3,19 @@ router-view
 </template>
 
 <script setup>
-import { supabase } from 'boot/api'
-import { onMounted, provide } from 'vue'
+import { supabase, useLogger } from 'boot/api'
 
-const logger = (id) => {
-  return {
-    log (...msg) {
-      console.log(`[${id}]`, ...msg)
-    }
-  }
-}
-
-const appLogger = logger('App')
+provide('logger', useLogger)
+const logger = useLogger('App')
 const router = useRouter()
+
 onMounted(() => {
-  appLogger.log('onMounted')
+  logger.log(':onMounted')
   supabase.auth.onAuthStateChange(async (event, session) => {
-    appLogger.log(':onAuthStateChange session', session)
-    appLogger.log(':onAuthStateChange event', event)
+    logger.log(':onAuthStateChange session', session)
+    logger.log(':onAuthStateChange event', event)
     if (session?.user) {
+      logger.log(':onAuthStateChange session.user found')
       // For some reason does not replace immidiately
       setTimeout(() => {
         router.replace('/')
@@ -30,5 +24,7 @@ onMounted(() => {
   })
 })
 
-provide('logger', logger)
+onBeforeUnmount(() => {
+  logger.log(':onBeforeUnmount')
+})
 </script>

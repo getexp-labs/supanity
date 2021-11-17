@@ -334,6 +334,7 @@ const handleDelete = async () => {
 onMounted(async () => {
   logger.log(':onMounted')
   if (!props.item) return
+  state.item = JSON.parse(JSON.stringify(props.item))
   let selectQuery = '*'
   Object
     .entries(props.definition.properties)
