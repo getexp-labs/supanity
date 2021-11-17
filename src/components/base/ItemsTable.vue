@@ -94,6 +94,9 @@ const itemColumns = computed(() => {
       columnDefinition.format = rowFormating(val.format)
       return columnDefinition
     })
+    .filter(c => {
+      return ['title', 'cost'].includes(c.field)
+    })
 })
 
 const refresh = () => onRequest({ pagination: pagination.value })

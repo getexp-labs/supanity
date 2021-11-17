@@ -15,8 +15,17 @@ div(
         div(
           v-for="(p,pkey) in definition.properties" :key="pkey"
           ).row.full-width.q-mb-sm
+          FieldCustom(
+            v-if="isFieldCustom(p,pkey)"
+            :label="pkey"
+            :modelValue="state.item[pkey]"
+            :definition="p"
+            :fieldKey="pkey"
+            :fieldCustom="isFieldCustom(p,pkey)"
+            :item="state.item"
+            )
           FieldID(
-            v-if="isPrimaryKey(p) && item && p.format === FORMATS.UUID && !isForeignKey(p)"
+            v-else-if="isPrimaryKey(p) && item && p.format === FORMATS.UUID && !isForeignKey(p)"
             :label="pkey"
             :value="state.item[pkey]"
             :definition="p"
@@ -106,8 +115,8 @@ div(
             )
     //- actions
     div(v-if="props.canEdit").row.full-width.q-px-md.q-py-sm
-      q-btn(dense no-caps color="primary" type="submit" :loading="state.submitting").q-px-sm.q-mr-sm {{ item ? 'Update' : 'Create' }}
-      q-btn(v-if="item" dense no-caps outline color="red" :loading="state.submitting" @click="handleDelete").q-px-sm Delete
+      q-btn(no-caps color="primary" type="submit" :loading="state.submitting").q-px-sm.q-mr-sm {{ item ? 'Update' : 'Create' }}
+      q-btn(v-if="item" no-caps outline color="red" :loading="state.submitting" @click="handleDelete").q-px-sm Delete
 </template>
 
 <script setup>
@@ -116,6 +125,7 @@ import { isPrimaryKey, isForeignKey, FORMATS, isImage, isImages, isHtml, getFore
 import { dataURLtoBlob } from 'src/helpers/file.helper'
 import { areArraysEqual, diffArray } from 'src/helpers/array.helper'
 
+import FieldCustom from './FieldCustom.vue'
 import FieldID from './FieldID.vue'
 import FieldText from './FieldText.vue'
 import FieldBoolean from './FieldBoolean.vue'
@@ -147,7 +157,13 @@ const state = reactive({
   submitting: false,
   dirty: false,
   error: undefined,
-  loading: !!props.item
+  loading: !!props.item,
+  fieldsCustom: computed(() => {
+    const supanityExtension = window.supanityExtension
+    if (!supanityExtension) return []
+    if (!supanityExtension.inputs) return []
+    return supanityExtension.inputs.filter(i => i.table === props.tableId)
+  })
 })
 
 watch(
@@ -162,6 +178,10 @@ watch(
     }
   },
   { deep: true })
+
+const isFieldCustom = (p, pkey) => {
+  return state.fieldsCustom.find(f => f.field === pkey)
+}
 
 const handleSubmit = async () => {
   logger.log('submitted')

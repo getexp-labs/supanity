@@ -3,7 +3,7 @@ import { supabase } from 'boot/api'
 
 const PAGE_GROUPS = [
   {
-    id: 'database',
+    id: 'page',
     type: 'group',
     name: 'Database',
     pages: [
@@ -13,29 +13,30 @@ const PAGE_GROUPS = [
     isOpened: true
   },
   {
-    id: 'pages',
+    id: 'page-extension',
     type: 'group',
     name: 'Pages',
     pages: [
+      // { id: ''}
     ],
     isOpened: false
   },
-  {
-    id: 'channels',
-    type: 'group',
-    name: 'Channels',
-    pages: [
-    ],
-    isOpened: false
-  },
-  {
-    id: 'apps',
-    type: 'group',
-    name: 'Apps',
-    pages: [
-    ],
-    isOpened: false
-  }
+  // {
+  //   id: 'channels',
+  //   type: 'group',
+  //   name: 'Channels',
+  //   pages: [
+  //   ],
+  //   isOpened: false
+  // },
+  // {
+  //   id: 'apps',
+  //   type: 'group',
+  //   name: 'Apps',
+  //   pages: [
+  //   ],
+  //   isOpened: false
+  // }
 ]
 
 export const useStoreMain = defineStore('main', {
@@ -46,7 +47,8 @@ export const useStoreMain = defineStore('main', {
     // supabase: null,
     user: null,
     userAuth: null,
-    pages: PAGE_GROUPS,
+    schema: null,
+    // pages: PAGE_GROUPS,
     // user_id: null
   }),
   getters: {
@@ -60,6 +62,50 @@ export const useStoreMain = defineStore('main', {
         if (page) res = page
         return res
       }, null)
+    },
+    pagesTables () {
+      if (!this.schema) return []
+      return Object.entries(this.schema.definitions)
+        .reduce((acc, [id, val]) => {
+          acc.push({
+            id: id,
+            type: 'page',
+            name: id,
+            body: {
+              type: 'table',
+              definition: val
+            }
+          })
+          return acc
+        }, [])
+    },
+    pagesExtension () {
+      const supanityExtension = window.supanityExtension
+      if (!supanityExtension) return []
+      return supanityExtension.pages || []
+    },
+    pages () {
+      return [
+        {
+          id: 'page',
+          type: 'group',
+          name: 'Database',
+          pages: [
+            { id: 'schema', type: 'page', name: 'Schema', body: { type: 'schema' } },
+            ...this.pagesTables
+          ],
+          isOpened: true
+        },
+        {
+          id: 'page-extension',
+          type: 'group',
+          name: 'Pages',
+          pages: [
+            ...this.pagesExtension,
+          ],
+          isOpened: true
+        },
+      ]
     }
   },
   actions: {
@@ -87,6 +133,7 @@ export const useStoreMain = defineStore('main', {
       return []
     },
     setPages (schema) {
+      // console.log('setPages schema', schema)
       if (!schema) return
       const tables = []
       Object.entries(schema.definitions).map(([id, val]) => {
@@ -101,7 +148,7 @@ export const useStoreMain = defineStore('main', {
         })
         return null
       })
-      this.pages = PAGE_GROUPS.map(g => g.id === 'database' ? { ...g, pages: [...g.pages, ...tables] } : { ...g })
+      this.pages = PAGE_GROUPS.map(g => g.id === 'page' ? { ...g, pages: [...g.pages, ...tables] } : { ...g })
     },
     async userSignIn () {
       console.log('[userSignIn] start')

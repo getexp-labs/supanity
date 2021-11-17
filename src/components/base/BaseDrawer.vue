@@ -15,21 +15,23 @@
     .row.full-width.items-start.content-start
       //- group
       div(
-        v-for="(g,gi) in storeMain.pages" :key="g.id"
+        v-for="(g,gi) in pages" :key="g.id"
         ).row.full-width.items-start.content-start.q-px-md
         //- group header
         div(
           @click="g.isOpened = !g.isOpened"
           ).row.full-width.items-center.content-center.q-py-sm.justify-between.cursor-pointer
-          span {{g.name}}
-          q-icon(:name="g.isOpened ? 'keyboard_arrow_down' : 'keyboard_arrow_up'")
+          span {{ g.name }}
+          //- q-icon(
+            v-if="g.pages && g.pages.length"
+            :name="g.isOpened ? 'keyboard_arrow_down' : 'keyboard_arrow_up'")
         //- pages
         div(
           v-show="g.isOpened"
           ).row.full-width.items-start.content-start
           router-link(
             v-for="(p,pi) in g.pages" :key="p.id"
-            :to="`/page/${p.id}`"
+            :to="`/${g.id}/${p.id}`"
             :class="{'active': p.id === storeMain?.page?.id}"
             ).page.row.full-width.items-center.content-center.q-px-md.q-py-sm
             span {{p.name}}
@@ -43,8 +45,17 @@ export default defineComponent({
   name: 'BaseDrawer',
   setup () {
     const storeMain = useStoreMain()
+    const pages = ref([])
+    watch(
+      () => storeMain.pages,
+      (to, from) => {
+        if (to) pages.value = to
+      },
+      { immediate: true },
+    )
     return {
-      storeMain
+      storeMain,
+      pages
     }
   }
 })

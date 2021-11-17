@@ -5,7 +5,7 @@ q-layout(view="lHh Lpr lFf")
       q-btn(flat dense icon="menu" aria-label="Menu" @click="state.leftDrawerOpened = !state.leftDrawerOpened")
       q-toolbar-title {{storeMain?.page?.name}}
       q-space
-      span.q-pa-md {{storeMain.user.user_metadata?.full_name}}
+      span.q-mr-md {{storeMain.user.user_metadata?.full_name}}
       q-btn(flat dense icon="logout" @click="storeMain.userSignOut()")
   q-drawer(
     v-model="state.leftDrawerOpened" show-if-above bordered
@@ -37,7 +37,8 @@ export default defineComponent({
     const { data: schema, error: schemaError } = useSWRV('/schema', fetcherSchema)
     // Using a watcher, you can update the store with any changes coming from swrv
     watch(schema, newSchema => {
-      storeMain.setPages(newSchema)
+      // storeMain.setPages(newSchema)
+      storeMain.schema = newSchema
     })
 
     return {
