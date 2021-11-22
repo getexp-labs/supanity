@@ -16,7 +16,7 @@ q-page()
   //- Dialog with item editor
   q-dialog(
     v-model="showEditor"
-    dark side="right" position="right" square full-height
+    square
     :persistent="itemChanged"
     @shake="tryItemClose"
     ).window-height
@@ -29,7 +29,6 @@ q-page()
       @item-changed="itemChanged = true"
       @item-upserted="handleUpsert"
       )
-  //- TODO
   //- Item Table
   ItemsTable(
     ref="tableObj"
@@ -43,7 +42,7 @@ q-page()
     )
   //- Action Add Button
   q-page-sticky(v-if="!definition.meta?.disabled" position="bottom-right" :offset="[32, 64]")
-    q-btn(round color="primary" size="md" icon="add" @click="handleAdd")
+    q-btn(round color="primary" size="lg" icon="add" @click="handleAdd")
 </template>
 
 <script setup>

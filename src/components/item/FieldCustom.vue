@@ -3,24 +3,25 @@
 
 <template lang="pug">
 component(
-  :is="fieldCustom.component"
+  :is="component"
   :definition="definition"
   :modelValue="modelValue"
   :fieldKey="fieldKey"
-  :fieldCustom="fieldCustom"
   :item="item")
 </template>
 
 <script setup>
+const emit = defineEmits(['update:modelValue'])
 const props = defineProps({
-  modelValue: { type: Boolean },
+  modelValue: { type: Object },
   label: { type: String },
   definition: { type: Object },
   fieldKey: { type: String },
-  fieldCustom: { type: Object },
   item: { type: Object },
 })
 
-const emit = defineEmits(['update:modelValue'])
-
+const component = computed(() => {
+  const supanityExtension = window.supanityExtension
+  return supanityExtension.components[props.definition.meta.component]
+})
 </script>

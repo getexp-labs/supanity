@@ -9,8 +9,8 @@
 <template lang="pug">
 div(:style="{borderRadius: '4px 4px 0px 0px'}").row.full-width.items-start.content-start.bg-grey-3
   //- title
-  .row.full-width.q-px-sm.q-py-xs
-    small(style="line-height: 1;").text-grey-7 {{label}}
+  .row.full-width.q-pa-sm
+    small(style="line-height: 1;").text-grey-7 {{props.definition?.meta?.label || fieldKey}}
   div(v-if="modelValue").row.full-width.items-start.content-start
     .col
       q-expansion-item(
@@ -58,7 +58,7 @@ import FieldRefDialog from './FieldRefDialog.vue'
 
 const props = defineProps({
   modelValue: { type: [Object, String, null] },
-  label: { type: String },
+  // label: { type: String },
   required: { type: Boolean, default: false },
   disabled: { type: Boolean },
   definition: { type: Object, required: true },

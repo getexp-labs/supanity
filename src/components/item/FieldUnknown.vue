@@ -2,7 +2,7 @@
 </style>
 
 <template lang="pug">
-div(
+//- div(
   :style="{borderRadius: '4px 4px 0px 0px'}"
   ).row.full-width.q-pa-sm.bg-grey-3.br
   .row.full-width

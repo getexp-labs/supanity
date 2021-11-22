@@ -1,4 +1,7 @@
 <style lang="scss" scoped>
+.items-table {
+  position: relative;
+}
 </style>
 
 <template lang="pug">
@@ -17,7 +20,7 @@ q-table(
   }`
   @request="onRequest"
   @row-click="itemClick"
-  )
+  ).items-table
   template(v-slot:top)
     .row.full-width.items-center.content-center
       q-input(
@@ -27,11 +30,12 @@ q-table(
         placeholder="Search"
         ).col
         template(v-slot:prepend)
-          q-icon(name="search")
-      q-btn(color="grey-6" flat dense no-caps) Properties
+          q-icon(name="search").q-mr-sm
+          //- q-btn(flat dense icon="refresh")
       q-btn(color="grey-6" flat dense no-caps) Filter
+      q-btn(color="grey-6" flat dense no-caps) Properties
       q-btn(color="grey-6" flat dense no-caps) Sort
-      q-btn(color="grey-6" flat dense icon="more_vert")
+      q-btn(color="grey-6" flat dense icon="more_vert").q-ml-sm
   template(v-slot:header-cell="{col}")
     th.br
       .row.full-width.justify-start
@@ -88,19 +92,15 @@ const onRequest = async ({ pagination: { page, rowsPerPage, sortBy, descending }
 }
 
 const itemColumns = computed(() => {
-  const hiddenColumns = props.definition.meta?.tableHiddenColumns
-    ? props.definition.meta.tableHiddenColumns
-    : props.hiddenColumns
-
   return Object
     .entries(props.definition.properties)
-    // .filter(([key]) => !hiddenColumns.includes(key))
     .map(([key, val]) => {
       const columnDefinition = {
         name: key,
         label: key,
         field: key,
         align: 'left',
+        sortable: true,
       }
 
       columnDefinition.style = 'max-width: 300px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;'
@@ -113,9 +113,6 @@ const itemColumns = computed(() => {
 
       return columnDefinition
     })
-    // .filter(c => {
-    //   return ['title', 'cost'].includes(c.field)
-    // })
 })
 
 const refresh = () => onRequest({ pagination: pagination.value })
@@ -132,7 +129,7 @@ const itemClick = (e, item, itemIndex) => {
 onMounted(async () => {
   logger.log(':onMounted')
   // Properties
-  let tableColumnsDefault = props.definition.meta.tableColumns
+  let tableColumnsDefault = props.definition?.meta?.tableColumns
   if (!tableColumnsDefault) {
     tableColumnsDefault = Object.keys(props.definition.properties)
   }

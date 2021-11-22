@@ -13,7 +13,7 @@ q-layout(view="lHh Lpr lFf")
     ).bg-grey-1
     BaseDrawer
   q-page-container
-    router-view
+    router-view(v-if="storeMain.schema")
 </template>
 
 <script>
