@@ -5,6 +5,7 @@
 </template>
 
 <script setup>
-const logger = inject('logger')('TestLayout')
-
+const logger = inject('logger')('FormBuilder')
+const state = reactive({
+})
 </script>

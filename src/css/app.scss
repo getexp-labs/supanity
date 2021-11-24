@@ -24,3 +24,10 @@ a {
 .q-dialog__inner {
   padding: 0;
 }
+
+.q-radio {
+  width: 100%;
+  &__label {
+    width: 100%;
+  }
+}
